@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     ...textStyles.base,
     alignSelf: "stretch",
     lineHeight: rem(1.5),
+    height: 50,
     textAlign: "center",
   },
 });

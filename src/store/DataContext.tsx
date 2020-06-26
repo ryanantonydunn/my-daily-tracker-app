@@ -85,8 +85,10 @@ export const DataProvider = ({ children }) => {
   const setTrackerOrder = (ids: string[]) =>
     setTrackers(ids.map((id) => getTracker(id)));
 
-  const getEntry = (entryId) => entries.find(({ id }) => id === entryId);
-  const addEntry = (entry) => setEntries((d) => ({ ...d, entry }));
+  const getEntry = (trackerId, dateKey) =>
+    entries.find((d) => d.trackerId === trackerId && d.dateKey === dateKey);
+  const addEntry = (entry: Entry) =>
+    setEntries((d) => [...d, { ...entry, id: newId() }]);
   const editEntry = (entry) =>
     setEntries((arr) =>
       arr.map((d) => (d.id === entry.id ? { ...d, ...entry } : d))

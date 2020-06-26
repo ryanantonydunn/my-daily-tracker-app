@@ -2,35 +2,24 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import React, { useCallback, useMemo, useState, useContext } from "react";
-import { StyleSheet, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useCallback, useContext, useMemo, useState } from "react";
+import { StyleSheet } from "react-native";
 import DayShifter from "../base/DayShifter";
 import { CloseButton } from "../base/IconButton";
-import T from "../base/Text";
 import Box from "../layout/Box";
 import LayoutForm from "../layout/LayoutForm";
 import DataContext from "../store/DataContext";
-
-const styles = StyleSheet.create({
-  skipButtonContainer: {
-    position: "absolute",
-    bottom: 10,
-    left: "50%",
-    transform: [{ translateX: -40 }],
-  },
-  skipButton: {
-    width: 80,
-    paddingTop: 15,
-    paddingBottom: 15,
-  },
-});
+import getDateKey from "../utils/getDateKey";
+import FormField from "./forms/FormField";
 
 const Stack = createStackNavigator();
 
 const EnterAll = ({ navigation }) => {
-  const { trackers = [], entries = [] } = useContext(DataContext);
+  const { trackers = [], addEntry, editEntry, getEntry } = useContext(
+    DataContext
+  );
   const [date, setDate] = useState(new Date());
+  const dateKey = getDateKey(date);
 
   const next = useCallback((i: number) => {
     if (i === trackers.length - 1) {
@@ -42,18 +31,25 @@ const EnterAll = ({ navigation }) => {
 
   const screens = useMemo(
     () =>
-      trackers.map((tracker, i) => () => (
-        <>
-          <View style={styles.skipButtonContainer}>
-            <TouchableOpacity style={styles.skipButton} onPress={() => next(i)}>
-              <T center light>
-                Skip
-              </T>
-            </TouchableOpacity>
-          </View>
-        </>
-      )),
-    [next]
+      trackers.map((tracker, i) => {
+        const entry = getEntry(tracker.id, dateKey);
+        return () => (
+          <FormField
+            type={tracker.type}
+            title={tracker.label}
+            onSkip={() => next(i)}
+            onSave={(value) => {
+              entry
+                ? editEntry({ ...entry, value })
+                : addEntry({ trackerId: tracker.id, dateKey, id: "", value });
+              next(i);
+            }}
+            value={entry?.value || ""}
+            slider={tracker.slider}
+          />
+        );
+      }),
+    [trackers, next, dateKey]
   );
 
   return (

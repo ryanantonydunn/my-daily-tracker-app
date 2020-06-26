@@ -102,11 +102,7 @@ const FormField = ({
     "number",
     "sliderValues",
   ].includes(type);
-  const showKeyboardSubmit = [
-    "text",
-    "textSingleLine",
-    "sliderValues",
-  ].includes(type);
+
   const Component = components[type];
 
   return (
@@ -138,7 +134,7 @@ const FormField = ({
           </TouchableOpacity>
         </View>
       )}
-      {showKeyboardSubmit && (
+      {hasKeyboard && (
         <Box style={styles.keyboardSubmit}>
           <ConfirmButton
             disabled={isInvalid(type, tempValue)}

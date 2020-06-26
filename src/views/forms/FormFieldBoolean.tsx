@@ -9,7 +9,7 @@ interface FormFieldBooleanProps {
 
 const FormFieldBoolean = ({ onSave }: FormFieldBooleanProps) => {
   return (
-    <Box row>
+    <Box row justifyCenter>
       <IconButton
         xl
         border={gray_400}

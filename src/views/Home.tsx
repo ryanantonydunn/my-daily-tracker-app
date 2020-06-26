@@ -63,6 +63,9 @@ const Home = ({ navigation }) => {
             title={`${tracker.label} - ${tracker.type}`}
           />
         ))}
+        {entries.map((entry) => (
+          <T key={entry.id}>{entry.value}</T>
+        ))}
       </Box>
       <View style={styles.buttonLeft}>
         <IconButton
