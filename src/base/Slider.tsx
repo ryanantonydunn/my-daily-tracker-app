@@ -8,11 +8,10 @@ import {
 import Box from "../layout/Box";
 import { gray_200, gray_400, green, white } from "./colors";
 import T from "./Text";
+import { SliderValues } from "../store/DataContext";
 
 interface SliderProps {
-  min: number;
-  max: number;
-  step: number;
+  slider: SliderValues;
   onChange: Function;
   value: string;
   style?: ViewStyle;
@@ -66,7 +65,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Slider = ({ min, max, step, onChange, value, style }: SliderProps) => {
+const Slider = ({ slider, onChange, value, style }: SliderProps) => {
+  const min = parseFloat(slider.min);
+  const max = parseFloat(slider.max);
+  const step = parseFloat(slider.step);
+
   const range = Math.max(max - min, 1);
   const xMultiplier = range / TRACK_WIDTH; // how much does a movement of one pixel equal
 

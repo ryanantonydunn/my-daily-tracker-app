@@ -6,10 +6,13 @@ const Logo = () => {
   return (
     <Box row>
       <T lg serif light>
-        Know
+        My
       </T>
       <T lg serif xLight>
-        Myself
+        Daily
+      </T>
+      <T lg serif light>
+        Tracker
       </T>
     </Box>
   );

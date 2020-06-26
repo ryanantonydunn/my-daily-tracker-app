@@ -1,15 +1,24 @@
-import React from "react";
 import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
+import React from "react";
+import EnterAll from "../views/EnterAll";
 import Home from "../views/Home";
 import Sandbox from "../views/Sandbox";
-import TrackerView from "../views/TrackerView";
 import TrackerForm from "../views/TrackerForm";
-import EnterAll from "../views/EnterAll";
+import TrackerView from "../views/TrackerView";
 
-const Stack = createStackNavigator();
+export type StackParamList = {
+  Home: undefined;
+  Sandbox: undefined;
+  TrackerView: { trackerId: string };
+  AddTracker: undefined;
+  EditTracker: { trackerId: string };
+  EnterAll: undefined;
+};
+
+const Stack = createStackNavigator<StackParamList>();
 
 const Router = () => {
   return (
@@ -21,9 +30,19 @@ const Router = () => {
     >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Sandbox" component={Sandbox} />
-      <Stack.Screen name="TrackerView" component={TrackerView} />
-      <Stack.Screen name="TrackerForm" component={TrackerForm} />
+      <Stack.Screen
+        name="TrackerView"
+        component={TrackerView}
+        initialParams={{ trackerId: null }}
+      />
+      <Stack.Screen name="AddTracker" component={TrackerForm} />
+      <Stack.Screen
+        name="EditTracker"
+        component={TrackerForm}
+        initialParams={{ trackerId: null }}
+      />
       <Stack.Screen name="EnterAll" component={EnterAll} />
+      {/* <Stack.Screen name="Enter" component={Enter} /> */}
     </Stack.Navigator>
   );
 };

@@ -3,6 +3,7 @@ import Icon from "../base/Icon";
 import T, { H1 } from "../base/Text";
 import Box from "../layout/Box";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
+import { ScrollView } from "react-native-gesture-handler";
 
 const icons = [
   "all-inclusive",
@@ -24,7 +25,7 @@ const icons = [
 const Sandbox = () => {
   return (
     <LayoutWithHeader back title={<H1>Sandbox</H1>}>
-      <Box scroll p1>
+      <Box component={ScrollView} p1>
         <T>Base</T>
         <T serif>Serif</T>
         <T sm>Small</T>

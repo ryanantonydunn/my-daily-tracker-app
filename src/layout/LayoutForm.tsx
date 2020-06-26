@@ -5,8 +5,10 @@ import {
   StyleSheet,
   View,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { white } from "../base/colors";
+import Box from "./Box";
 
 const styles = StyleSheet.create({
   fill: {
@@ -16,13 +18,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  formContent: {
-    height: 400,
-    marginTop: "auto",
-    marginBottom: "auto",
-    alignItems: "center",
-  },
   formContainer: {
+    position: "relative",
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
@@ -31,14 +28,23 @@ const styles = StyleSheet.create({
 });
 
 export const FormContainer = ({ children }) => (
-  <KeyboardAvoidingView style={styles.formContainer}>
-    {children}
-  </KeyboardAvoidingView>
+  <View style={styles.formContainer}>{children}</View>
 );
 
 export const FormContent = ({ children }) => (
-  <KeyboardAvoidingView style={styles.formContent}>
+  <Box flex1 justifyCenter itemsCenter bgWhite>
     {children}
+  </Box>
+);
+
+export const FormKeyboardContent = ({ children }) => (
+  <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : null}
+    style={styles.content}
+  >
+    <Box flex1 justifyCenter itemsCenter bgWhite>
+      {children}
+    </Box>
   </KeyboardAvoidingView>
 );
 
@@ -47,9 +53,7 @@ const LayoutForm = ({ children }) => {
     <>
       <StatusBar animated barStyle="dark-content" />
       <SafeAreaView style={styles.fill}>
-        <KeyboardAvoidingView style={styles.content}>
-          {children}
-        </KeyboardAvoidingView>
+        <View style={styles.content}>{children}</View>
       </SafeAreaView>
     </>
   );

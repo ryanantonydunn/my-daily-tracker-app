@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     height: 64,
   },
   xl: {
-    width: 96,
-    height: 96,
+    width: 82,
+    height: 82,
   },
 });
 

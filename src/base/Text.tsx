@@ -1,12 +1,12 @@
-import React, { ReactNode, useMemo } from "react";
-import { Text as RNText, StyleSheet } from "react-native";
 import {
-  useFonts,
   Lato_400Regular,
   Lato_700Bold,
+  useFonts,
 } from "@expo-google-fonts/lato";
 import { ZillaSlab_400Regular } from "@expo-google-fonts/zilla-slab";
-import { gray_700, gray_500, gray_200, white } from "./colors";
+import React, { ReactNode, useMemo } from "react";
+import { StyleSheet, Text as RNText } from "react-native";
+import { gray_200, gray_500, gray_700, white } from "./colors";
 
 interface TextProps {
   children;
@@ -34,14 +34,17 @@ export const FontProvider = ({ children }: { children: ReactNode }) => {
 
 export const rem = (n: number) => 20 * n;
 
-const styles = StyleSheet.create({
+export const sans = "Lato_400Regular";
+export const serif = "ZillaSlab_400Regular";
+
+export const textStyles = StyleSheet.create({
   base: {
-    fontFamily: "Lato_400Regular",
+    fontFamily: sans,
     fontSize: rem(0.875),
     color: gray_700,
   },
   serif: {
-    fontFamily: "ZillaSlab_400Regular",
+    fontFamily: serif,
   },
   xs: {
     fontSize: rem(0.65),
@@ -77,10 +80,10 @@ const styles = StyleSheet.create({
 
 const T = ({ children, ...styleOptions }: TextProps) => {
   const propStyles = useMemo(
-    () => Object.keys(styleOptions).map((key) => styles[key]),
+    () => Object.keys(styleOptions).map((key) => textStyles[key]),
     [styleOptions]
   );
-  return <RNText style={[styles.base, ...propStyles]}>{children}</RNText>;
+  return <RNText style={[textStyles.base, ...propStyles]}>{children}</RNText>;
 };
 
 export const H1 = ({ children }: { children: ReactNode }) => (
@@ -90,7 +93,13 @@ export const H1 = ({ children }: { children: ReactNode }) => (
 );
 
 export const H2 = ({ children }: { children: ReactNode }) => (
-  <T serif md center>
+  <T serif lg center>
+    {children}
+  </T>
+);
+
+export const H3 = ({ children }: { children: ReactNode }) => (
+  <T sm bold>
     {children}
   </T>
 );

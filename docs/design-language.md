@@ -48,6 +48,8 @@ Using [Material Design](https://material.io/resources/icons/?style=baseline)
 - close
 - delete
 - edit
+- keyboard-arrow-left
+- keyboard-arrow-right
 - linear_scale (slider field)
 - more_vert (three dots for dropdown menus)
 - playlist_add (add new tracker button)

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { gray_900, green, white, gray_500, gray_200 } from "../base/colors";
 import IconButton from "../base/IconButton";
 import Logo from "../base/Logo";
 import Box from "../layout/Box";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
+import DataContext from "../store/DataContext";
+import { ScrollView } from "react-native-gesture-handler";
+import T from "../base/Text";
 
 const styles = StyleSheet.create({
   button: {
@@ -30,6 +33,7 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({ navigation }) => {
+  const { trackers, entries } = useContext(DataContext);
   return (
     <LayoutWithHeader
       title={<Logo />}
@@ -44,18 +48,21 @@ const Home = ({ navigation }) => {
         },
       ]}
     >
-      <Box scroll p2>
+      <Box component={ScrollView} p2>
         <Button
           onPress={() => navigation.navigate("Sandbox")}
           title="Sandbox"
         />
         <Box h2 />
-        <Button
-          onPress={() =>
-            navigation.navigate("TrackerView", { trackerId: "test-tracker" })
-          }
-          title="View Tracker"
-        />
+        {trackers.map((tracker) => (
+          <Button
+            key={tracker.id}
+            onPress={() =>
+              navigation.navigate("TrackerView", { trackerId: tracker.id })
+            }
+            title={`${tracker.label} - ${tracker.type}`}
+          />
+        ))}
       </Box>
       <View style={styles.buttonLeft}>
         <IconButton
@@ -64,7 +71,7 @@ const Home = ({ navigation }) => {
           color={gray_500}
           name="playlist-add"
           style={styles.button}
-          onPress={() => navigation.navigate("TrackerForm")}
+          onPress={() => navigation.navigate("AddTracker")}
         />
       </View>
       <View style={styles.buttonRight}>

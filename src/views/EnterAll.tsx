@@ -1,20 +1,37 @@
-import React, { useEffect, useMemo, useCallback } from "react";
-import { View, Text, Button } from "react-native";
-import IconButton, { CloseButton } from "../base/IconButton";
-import { red } from "../base/colors";
 import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import { trackers } from "../store/TrackerContext";
-import { H2 } from "../base/Text";
-import EnterField from "./EnterField";
-import LayoutForm, { FormContent, FormContainer } from "../layout/LayoutForm";
+import React, { useCallback, useMemo, useState, useContext } from "react";
+import { StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import DayShifter from "../base/DayShifter";
+import { CloseButton } from "../base/IconButton";
+import T from "../base/Text";
 import Box from "../layout/Box";
+import LayoutForm from "../layout/LayoutForm";
+import DataContext from "../store/DataContext";
+
+const styles = StyleSheet.create({
+  skipButtonContainer: {
+    position: "absolute",
+    bottom: 10,
+    left: "50%",
+    transform: [{ translateX: -40 }],
+  },
+  skipButton: {
+    width: 80,
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+});
 
 const Stack = createStackNavigator();
 
 const EnterAll = ({ navigation }) => {
+  const { trackers = [], entries = [] } = useContext(DataContext);
+  const [date, setDate] = useState(new Date());
+
   const next = useCallback((i: number) => {
     if (i === trackers.length - 1) {
       navigation.navigate("Home");
@@ -26,17 +43,15 @@ const EnterAll = ({ navigation }) => {
   const screens = useMemo(
     () =>
       trackers.map((tracker, i) => () => (
-        <FormContainer>
-          <EnterField
-            tracker={tracker}
-            onSave={(newValue) => {
-              // save
-              console.log(newValue);
-              next(i);
-            }}
-          />
-          <Button onPress={() => next(i)} title="Skip" />
-        </FormContainer>
+        <>
+          <View style={styles.skipButtonContainer}>
+            <TouchableOpacity style={styles.skipButton} onPress={() => next(i)}>
+              <T center light>
+                Skip
+              </T>
+            </TouchableOpacity>
+          </View>
+        </>
       )),
     [next]
   );
@@ -44,19 +59,24 @@ const EnterAll = ({ navigation }) => {
   return (
     <LayoutForm>
       <Box row itemsCenter justifyBetween>
-        <View />
-        <CloseButton to="Home" />
+        <Box w5 />
+        <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
+        <Box w5 itemsCenter justifyCenter>
+          <CloseButton to="Home" />
+        </Box>
       </Box>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      >
-        {screens.map((Component, i) => (
-          <Stack.Screen key={i} name={`EnterAll${i}`} component={Component} />
-        ))}
-      </Stack.Navigator>
+      {!!trackers.length && (
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        >
+          {screens.map((Component, i) => (
+            <Stack.Screen key={i} name={`EnterAll${i}`} component={Component} />
+          ))}
+        </Stack.Navigator>
+      )}
     </LayoutForm>
   );
 };

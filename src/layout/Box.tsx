@@ -1,16 +1,11 @@
-import React, { ReactNode, useMemo } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  ViewStyle,
-  StyleProp,
-} from "react-native";
+import React, { FunctionComponent, ReactNode, useMemo } from "react";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { white } from "../base/colors";
 
 interface BoxProps {
+  component?: any;
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  scroll?: boolean;
   flex1?: boolean;
   row?: boolean;
   itemsCenter?: boolean;
@@ -18,13 +13,19 @@ interface BoxProps {
   justifyCenter?: boolean;
   justifyBetween?: boolean;
   wrap?: boolean;
+  bgWhite?: boolean;
   p1?: boolean;
   p2?: boolean;
   w1?: boolean;
   w2?: boolean;
+  w3?: boolean;
+  w4?: boolean;
+  w5?: boolean;
   h1?: boolean;
   h2?: boolean;
   h3?: boolean;
+  h4?: boolean;
+  h5?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -49,6 +50,9 @@ const styles = StyleSheet.create({
   wrap: {
     flexWrap: "wrap",
   },
+  bgWhite: {
+    backgroundColor: white,
+  },
   p1: {
     padding: 10,
   },
@@ -61,6 +65,15 @@ const styles = StyleSheet.create({
   w2: {
     width: 20,
   },
+  w3: {
+    width: 30,
+  },
+  w4: {
+    width: 40,
+  },
+  w5: {
+    width: 50,
+  },
   h1: {
     height: 10,
   },
@@ -70,10 +83,16 @@ const styles = StyleSheet.create({
   h3: {
     height: 30,
   },
+  h4: {
+    height: 40,
+  },
+  h5: {
+    height: 50,
+  },
 });
 
-const Box = ({ children, style, scroll, ...styleOptions }: BoxProps) => {
-  const Component = scroll ? ScrollView : View;
+const Box = ({ component, children, style, ...styleOptions }: BoxProps) => {
+  const Component = component ? component : View;
   const propStyles = useMemo(
     () => Object.keys(styleOptions).map((key) => styles[key]),
     [styleOptions]
