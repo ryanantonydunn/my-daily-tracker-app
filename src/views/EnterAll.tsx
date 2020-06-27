@@ -4,12 +4,15 @@ import {
 } from "@react-navigation/stack";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import DayShifter from "../base/DayShifter";
-import { CloseButton } from "../base/IconButton";
+import IconButton, { CloseButton } from "../base/IconButton";
 import Box from "../layout/Box";
 import LayoutForm from "../layout/LayoutForm";
 import DataContext from "../store/DataContext";
 import { getDateKey } from "../utils/getDateKey";
 import FormField from "./forms/FormField";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import T from "../base/Text";
+import { green, white } from "../base/colors";
 
 const Stack = createStackNavigator();
 
@@ -55,12 +58,14 @@ const EnterAll = ({ navigation }) => {
     <LayoutForm>
       <Box row itemsCenter justifyBetween>
         <Box w5 />
-        <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
+        {!!trackers.length && (
+          <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
+        )}
         <Box w5 itemsCenter justifyCenter>
           <CloseButton to="Home" />
         </Box>
       </Box>
-      {!!trackers.length && (
+      {!!trackers.length ? (
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
@@ -71,6 +76,23 @@ const EnterAll = ({ navigation }) => {
             <Stack.Screen key={i} name={`EnterAll${i}`} component={Component} />
           ))}
         </Stack.Navigator>
+      ) : (
+        <Box flex1 itemsCenter justifyCenter>
+          <TouchableOpacity onPress={() => navigation.navigate("AddTracker")}>
+            <Box itemsCenter>
+              <IconButton
+                lg
+                name="playlist-add"
+                bgColor={green}
+                color={white}
+              />
+              <Box h2 />
+              <T bold center>
+                Set up your first tracker!
+              </T>
+            </Box>
+          </TouchableOpacity>
+        </Box>
       )}
     </LayoutForm>
   );
