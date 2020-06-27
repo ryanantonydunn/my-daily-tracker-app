@@ -5,6 +5,7 @@ import { gray_400, gray_500 } from "../../base/colors";
 import Icon from "../../base/Icon";
 import T from "../../base/Text";
 import Box from "../../layout/Box";
+import { trackerTypes } from "../../utils/trackerTypes";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,13 +26,6 @@ const styles = StyleSheet.create({
     borderRadius: 99999,
   },
 });
-
-const trackerTypes = [
-  { title: "Checkbox", icon: "check", value: "boolean" },
-  { title: "Slider", icon: "linear-scale", value: "slider" },
-  { title: "Text", icon: "short-text", value: "text" },
-  { title: "Number", icon: "all-inclusive", value: "number" },
-];
 
 const FormFieldTrackerType = ({ onSave }) => {
   return (

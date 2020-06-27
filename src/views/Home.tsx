@@ -39,21 +39,12 @@ const Home = ({ navigation }) => {
       title={<Logo />}
       menu={[
         {
-          onPress: () => navigation.navigate("ChooseDate"),
-          children: "View on date",
-        },
-        {
-          onPress: () => navigation.navigate("ChooseDate"),
-          children: "Do something",
+          onPress: () => navigation.navigate("Sandbox"),
+          children: "Sandbox",
         },
       ]}
     >
       <Box component={ScrollView} p2>
-        <Button
-          onPress={() => navigation.navigate("Sandbox")}
-          title="Sandbox"
-        />
-        <Box h2 />
         {trackers.map((tracker) => (
           <Button
             key={tracker.id}

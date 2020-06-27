@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
-import { StyleSheet, View, Animated } from "react-native";
-import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
-import { white } from "../../base/colors";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { gray_400, white } from "../../base/colors";
+import Icon from "../../base/Icon";
 import { ConfirmButton } from "../../base/IconButton";
 import T, { H2 } from "../../base/Text";
 import Box from "../../layout/Box";
 import { SliderValues } from "../../store/DataContext";
+import { trackerIcon } from "../../utils/trackerTypes";
 import useKeyboard from "../../utils/useKeyboard";
 import FormFieldBoolean from "./FormFieldBoolean";
 import FormFieldNumber from "./FormFieldNumber";
@@ -16,7 +18,6 @@ import FormFieldSliderValues, {
 import FormFieldText from "./FormFieldText";
 import FormFieldTextSingle from "./FormFieldTextSingle";
 import FormFieldTrackerType from "./FormFieldTrackerType";
-import { useNavigation } from "@react-navigation/native";
 
 type FormFieldType =
   | "boolean"
@@ -105,6 +106,8 @@ const FormField = ({
   const Component = components[type];
 
   const keyboardHeight = useKeyboard();
+
+  const icon = trackerIcon(type);
 
   return (
     <View

@@ -2,7 +2,7 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { CloseButton } from "../base/IconButton";
 import Box from "../layout/Box";
 import LayoutForm from "../layout/LayoutForm";
@@ -17,17 +17,20 @@ const Stack = createStackNavigator();
 
 const TrackerForm = ({ navigation, route }) => {
   const { getTracker, addTracker, editTracker } = useContext(DataContext);
-  const [tracker, setTracker] = useState<Tracker>(
-    route === "EditTracker" ? getTracker() : emptyTracker()
+  const { name, params } = route;
+
+  const [tracker, setTracker] = useState<Tracker>(() =>
+    name === "EditTracker" ? getTracker(params.trackerId) : emptyTracker()
   );
 
-  const save = (directSave) => {
-    if (route === "EditTracker") {
-      editTracker(directSave || tracker);
+  const save = (newTracker = tracker) => {
+    if (name === "EditTracker") {
+      editTracker(newTracker);
+      navigation.navigate("TrackerView", { trackerId: params.trackerId });
     } else {
-      addTracker(directSave || tracker);
+      addTracker(newTracker);
+      navigation.navigate("Home");
     }
-    navigation.navigate("Home");
   };
 
   const SetType = useMemo(
@@ -92,7 +95,9 @@ const TrackerForm = ({ navigation, route }) => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       >
-        <Stack.Screen name="TrackerType" component={SetType} />
+        {name !== "EditTracker" && (
+          <Stack.Screen name="TrackerType" component={SetType} />
+        )}
         <Stack.Screen name="TrackerLabel" component={SetLabel} />
         <Stack.Screen name="TrackerSlider" component={SetSlider} />
       </Stack.Navigator>

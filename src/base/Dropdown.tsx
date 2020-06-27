@@ -106,7 +106,10 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
                   <TouchableOpacity
                     key={i}
                     style={styles.dropdownItem}
-                    onPress={() => onPress()}
+                    onPress={() => {
+                      onClose();
+                      onPress();
+                    }}
                   >
                     {renderChildren(children)}
                   </TouchableOpacity>

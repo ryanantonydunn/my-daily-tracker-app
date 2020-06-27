@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useKeyboard from "../utils/useKeyboard";
 
-type TrackerType = "slider" | "number" | "text" | "boolean";
+export type TrackerType = "slider" | "number" | "text" | "boolean";
 
 export interface SliderValues {
   min: string;

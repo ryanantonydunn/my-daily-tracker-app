@@ -88,7 +88,8 @@ const Slider = ({ slider, onChange, value, style }: SliderProps) => {
     () =>
       Array.from(
         { length: GUIDE_NUMBERS },
-        (_, i) => min + (range / (GUIDE_NUMBERS - 1)) * i
+        (_, i) =>
+          Math.round((min + (range / (GUIDE_NUMBERS - 1)) * i) * 100) / 100
       ),
     [min, range]
   );
