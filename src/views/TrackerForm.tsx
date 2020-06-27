@@ -55,7 +55,6 @@ const TrackerForm = ({ navigation, route }) => {
             setTracker({ ...tracker, label });
             navigation.navigate("TrackerSlider");
           } else {
-            console.log(tracker, label);
             save({ ...tracker, label });
           }
         }}
@@ -78,8 +77,6 @@ const TrackerForm = ({ navigation, route }) => {
     [tracker]
   );
 
-  console.log(tracker);
-
   return (
     <LayoutForm>
       <Box row itemsCenter justifyBetween>
@@ -89,6 +86,7 @@ const TrackerForm = ({ navigation, route }) => {
         </Box>
       </Box>
       <Stack.Navigator
+        keyboardHandlingEnabled={false}
         screenOptions={{
           headerShown: false,
           ...TransitionPresets.SlideFromRightIOS,

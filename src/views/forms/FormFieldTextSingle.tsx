@@ -1,8 +1,7 @@
-import React, { useRef, useEffect } from "react";
-import { StyleSheet, Keyboard } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { rem, textStyles } from "../../base/Text";
-import { useNavigation } from "@react-navigation/native";
+import { textStyles } from "../../base/Text";
 import useAutoFocus from "../../utils/useAutoFocus";
 
 interface FormFieldTextSingleProps {
@@ -15,8 +14,6 @@ const styles = StyleSheet.create({
   input: {
     ...textStyles.base,
     alignSelf: "stretch",
-    lineHeight: rem(1.5),
-    height: 50,
     textAlign: "center",
   },
 });

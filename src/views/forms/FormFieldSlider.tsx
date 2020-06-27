@@ -18,7 +18,7 @@ const FormFieldSlider = ({
   onSave,
 }: FormFieldBooleanProps) => {
   return (
-    <Box itemsCenter justifyCenter>
+    <Box flex1 itemsCenter justifyCenter>
       <Slider slider={slider} onChange={(str) => onChange(str)} value={value} />
       <Box h3 />
       <ConfirmButton disabled={value === ""} onPress={() => onSave(value)} />

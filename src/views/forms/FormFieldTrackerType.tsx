@@ -13,8 +13,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 320,
-    marginLeft: "auto",
-    marginRight: "auto",
   },
   button: {
     width: 120,
@@ -37,19 +35,21 @@ const trackerTypes = [
 
 const FormFieldTrackerType = ({ onSave }) => {
   return (
-    <View style={styles.container}>
-      {trackerTypes.map(({ title, icon, value }) => (
-        <TouchableOpacity
-          key={value}
-          onPress={() => onSave(value)}
-          style={styles.button}
-        >
-          <Icon name={icon} size={30} color={gray_500} />
-          <Box h1 />
-          <T sm>{title}</T>
-        </TouchableOpacity>
-      ))}
-    </View>
+    <Box flex1 justifyCenter itemsCenter>
+      <View style={styles.container}>
+        {trackerTypes.map(({ title, icon, value }) => (
+          <TouchableOpacity
+            key={value}
+            onPress={() => onSave(value)}
+            style={styles.button}
+          >
+            <Icon name={icon} size={30} color={gray_500} />
+            <Box h1 />
+            <T sm>{title}</T>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </Box>
   );
 };
 

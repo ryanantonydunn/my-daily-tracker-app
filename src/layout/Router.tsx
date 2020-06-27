@@ -8,6 +8,7 @@ import Home from "../views/Home";
 import Sandbox from "../views/Sandbox";
 import TrackerForm from "../views/TrackerForm";
 import TrackerView from "../views/TrackerView";
+import EnterSingle from "../views/EnterSingle";
 
 export type StackParamList = {
   Home: undefined;
@@ -16,6 +17,7 @@ export type StackParamList = {
   AddTracker: undefined;
   EditTracker: { trackerId: string };
   EnterAll: undefined;
+  EnterSingle: { trackerId: string; dateKey: string };
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -42,7 +44,7 @@ const Router = () => {
         initialParams={{ trackerId: null }}
       />
       <Stack.Screen name="EnterAll" component={EnterAll} />
-      {/* <Stack.Screen name="Enter" component={Enter} /> */}
+      <Stack.Screen name="EnterSingle" component={EnterSingle} />
     </Stack.Navigator>
   );
 };

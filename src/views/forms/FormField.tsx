@@ -1,11 +1,12 @@
-import React, { ReactNode, useState, useContext } from "react";
-import { StyleSheet, View, KeyboardAvoidingView, Keyboard } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useEffect, useState, useRef } from "react";
+import { StyleSheet, View, Animated } from "react-native";
+import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import { white } from "../../base/colors";
 import { ConfirmButton } from "../../base/IconButton";
 import T, { H2 } from "../../base/Text";
 import Box from "../../layout/Box";
-import DataContext, { SliderValues } from "../../store/DataContext";
+import { SliderValues } from "../../store/DataContext";
+import useKeyboard from "../../utils/useKeyboard";
 import FormFieldBoolean from "./FormFieldBoolean";
 import FormFieldNumber from "./FormFieldNumber";
 import FormFieldSlider from "./FormFieldSlider";
@@ -15,7 +16,7 @@ import FormFieldSliderValues, {
 import FormFieldText from "./FormFieldText";
 import FormFieldTextSingle from "./FormFieldTextSingle";
 import FormFieldTrackerType from "./FormFieldTrackerType";
-import { useSafeArea } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 type FormFieldType =
   | "boolean"
@@ -50,8 +51,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     backgroundColor: white,
-    alignItems: "center",
-    justifyContent: "center",
   },
   content: {
     paddingLeft: 20,
@@ -92,9 +91,9 @@ const FormField = ({
   value,
   onSave,
 }: FormFieldProps) => {
-  const { keyboardHeight } = useContext(DataContext);
-  const { bottom } = useSafeArea();
   const [tempValue, setTempValue] = useState(value);
+
+  useEffect(() => setTempValue(value), [value]);
 
   const hasKeyboard = [
     "text",
@@ -105,16 +104,18 @@ const FormField = ({
 
   const Component = components[type];
 
+  const keyboardHeight = useKeyboard();
+
   return (
-    <Box
+    <View
       style={[
         styles.container,
-        { marginBottom: hasKeyboard ? keyboardHeight - bottom : 0 },
+        { marginBottom: hasKeyboard ? keyboardHeight : 0 },
       ]}
     >
       <Box flex1 p2 style={styles.content}>
         <H2>{title}</H2>
-        <Box h2 />
+        <Box h4 />
         <Component
           slider={slider}
           value={tempValue}
@@ -124,6 +125,7 @@ const FormField = ({
             if (!isInvalid(type, newVal)) onSave(newVal);
           }}
         />
+        <Box h4 />
       </Box>
       {!!onSkip && (
         <View style={styles.skipButtonContainer}>
@@ -142,7 +144,7 @@ const FormField = ({
           />
         </Box>
       )}
-    </Box>
+    </View>
   );
 };
 

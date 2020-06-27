@@ -9,16 +9,18 @@ interface FormFieldBooleanProps {
 
 const FormFieldBoolean = ({ onSave }: FormFieldBooleanProps) => {
   return (
-    <Box row justifyCenter>
-      <IconButton
-        xl
-        border={gray_400}
-        color={red}
-        name="close"
-        onPress={() => onSave("false")}
-      />
-      <Box w2 />
-      <ConfirmButton onPress={() => onSave("true")} />
+    <Box flex1 itemsCenter justifyCenter>
+      <Box row>
+        <IconButton
+          xl
+          border={gray_400}
+          color={red}
+          name="close"
+          onPress={() => onSave("false")}
+        />
+        <Box w2 />
+        <ConfirmButton onPress={() => onSave("true")} />
+      </Box>
     </Box>
   );
 };

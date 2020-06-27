@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { rem, textStyles } from "../../base/Text";
+import { textStyles } from "../../base/Text";
+import formatNumber from "../../utils/formatNumber";
 
 interface FormFieldNumberProps {
   value: any;
@@ -13,8 +14,6 @@ const styles = StyleSheet.create({
   input: {
     ...textStyles.base,
     alignSelf: "stretch",
-    lineHeight: rem(1.5),
-    height: 50,
     textAlign: "center",
   },
 });
@@ -27,8 +26,8 @@ const FormFieldNumber = ({ onChange, onSave, value }: FormFieldNumberProps) => {
       returnKeyType="done"
       blurOnSubmit={false}
       value={value}
-      onChangeText={(str) => onChange(str)}
-      onSubmitEditing={() => onSave(value)}
+      onChangeText={(str) => onChange(formatNumber(str))}
+      onSubmitEditing={() => onSave()}
       style={styles.input}
     />
   );

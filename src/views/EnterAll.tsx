@@ -3,13 +3,12 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import React, { useCallback, useContext, useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
 import DayShifter from "../base/DayShifter";
 import { CloseButton } from "../base/IconButton";
 import Box from "../layout/Box";
 import LayoutForm from "../layout/LayoutForm";
 import DataContext from "../store/DataContext";
-import getDateKey from "../utils/getDateKey";
+import { getDateKey } from "../utils/getDateKey";
 import FormField from "./forms/FormField";
 
 const Stack = createStackNavigator();

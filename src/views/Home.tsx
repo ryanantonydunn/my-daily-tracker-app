@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({ navigation }) => {
-  const { trackers, entries } = useContext(DataContext);
+  const { trackers, entries, getTracker } = useContext(DataContext);
   return (
     <LayoutWithHeader
       title={<Logo />}
@@ -63,9 +63,24 @@ const Home = ({ navigation }) => {
             title={`${tracker.label} - ${tracker.type}`}
           />
         ))}
-        {entries.map((entry) => (
-          <T key={entry.id}>{entry.value}</T>
-        ))}
+        <View style={{ width: 100, height: 10, backgroundColor: "grey" }} />
+        {entries.map((entry) => {
+          const tracker = getTracker(entry.trackerId);
+          return (
+            !!tracker && (
+              <Button
+                key={entry.id}
+                onPress={() =>
+                  navigation.navigate("EnterSingle", {
+                    trackerId: tracker.id,
+                    dateKey: entry.dateKey,
+                  })
+                }
+                title={`${tracker.label} - ${entry.dateKey} - ${entry.value}`}
+              />
+            )
+          );
+        })}
       </Box>
       <View style={styles.buttonLeft}>
         <IconButton
