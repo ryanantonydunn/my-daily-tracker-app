@@ -69,9 +69,7 @@ const FormFieldSliderValues = ({
         autoFocus={autoFocus}
         keyboardType="decimal-pad"
         value={value[key]}
-        onChangeText={(str) =>
-          onChange({ ...value, [key]: formatNumber(str.substring(0, 7)) })
-        }
+        onChangeText={(str) => onChange({ ...value, [key]: formatNumber(str) })}
         style={styles.input}
       />
     </TouchableWithoutFeedback>

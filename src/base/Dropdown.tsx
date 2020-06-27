@@ -1,11 +1,14 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, View, Dimensions } from "react-native";
 import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { gray_400, gray_900, white } from "../base/colors";
 import T from "../base/Text";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const { width, height } = Dimensions.get("window");
 
 export interface DropdownItem {
   onPress?: Function;
@@ -23,9 +26,16 @@ interface DropdownProps {
 }
 
 const styles = StyleSheet.create({
-  bgClose: {
-    width: "100%",
-    height: "100%",
+  fillScreen: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width,
+    height,
+  },
+  touchable: {
+    width,
+    height,
   },
   dropdown: {
     position: "absolute",
@@ -44,12 +54,12 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   dropdownItem: {
-    padding: 12,
+    padding: 15,
   },
 });
 
 const renderChildren = (d: ReactNode | string) =>
-  typeof d === "string" ? <T sm>{d}</T> : d;
+  typeof d === "string" ? <T>{d}</T> : d;
 
 const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
   const [isRendered, setIsRendered] = useState(false);
@@ -74,43 +84,48 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
     });
   }, [open]);
 
-  // if (!isRendered) return null;
+  if (!isRendered) return null;
 
   return (
     <>
-      {/* <TouchableWithoutFeedback
-        onPress={() => onClose()}
-        style={styles.bgClose}
-      /> */}
-      <View style={styles.dropdown}>
-        <View style={{ width: 100, height: 100, backgroundColor: "red" }} />
-      </View>
-      <Animated.View
-        style={[
-          styles.dropdown,
-          {
-            ...position,
-            opacity: opacity.current,
-            transform: [{ translateY: y.current }],
-          },
-        ]}
-      >
-        {items.map(({ children, onPress }, i) =>
-          onPress ? (
-            <TouchableOpacity
-              key={i}
-              style={styles.dropdownItem}
-              onPress={() => onPress()}
+      <View style={styles.fillScreen}>
+        <SafeAreaView>
+          <View style={{ flex: 1 }}>
+            <Animated.View
+              style={[
+                styles.dropdown,
+                {
+                  ...position,
+                  opacity: opacity.current,
+                  transform: [{ translateY: y.current }],
+                },
+              ]}
             >
-              {renderChildren(children)}
-            </TouchableOpacity>
-          ) : (
-            <View key={i} style={styles.dropdownItem}>
-              {renderChildren(children)}
+              {items.map(({ children, onPress }, i) =>
+                onPress ? (
+                  <TouchableOpacity
+                    key={i}
+                    style={styles.dropdownItem}
+                    onPress={() => onPress()}
+                  >
+                    {renderChildren(children)}
+                  </TouchableOpacity>
+                ) : (
+                  <View key={i} style={styles.dropdownItem}>
+                    {renderChildren(children)}
+                  </View>
+                )
+              )}
+            </Animated.View>
+            <View style={styles.fillScreen}>
+              <TouchableOpacity
+                style={styles.touchable}
+                onPress={() => onClose()}
+              />
             </View>
-          )
-        )}
-      </Animated.View>
+          </View>
+        </SafeAreaView>
+      </View>
     </>
   );
 };
