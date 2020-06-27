@@ -2,11 +2,9 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactNode, useState } from "react";
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import { gray_200, gray_900, white } from "../base/colors";
+import Dropdown, { DropdownItem } from "../base/Dropdown";
 import IconButton from "../base/IconButton";
 import Box from "./Box";
-import Dropdown, { DropdownItem } from "../base/Dropdown";
-import T from "../base/Text";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 interface LayoutWithHeaderProps {
   title: ReactNode;

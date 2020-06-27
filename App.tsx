@@ -4,6 +4,7 @@ import { FontProvider } from "./src/base/Text";
 import Router from "./src/layout/Router";
 import { DataProvider } from "./src/store/DataContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { UIProvider } from "./src/store/UIContext";
 
 export default function App() {
   return (
@@ -11,7 +12,9 @@ export default function App() {
       <SafeAreaProvider>
         <FontProvider>
           <DataProvider>
-            <Router />
+            <UIProvider>
+              <Router />
+            </UIProvider>
           </DataProvider>
         </FontProvider>
       </SafeAreaProvider>
