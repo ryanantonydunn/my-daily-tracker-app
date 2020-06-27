@@ -3,16 +3,16 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import React, { useCallback, useContext, useMemo, useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { green, white } from "../base/colors";
 import DayShifter from "../base/DayShifter";
-import IconButton, { CloseButton } from "../base/IconButton";
+import IconButton from "../base/IconButton";
+import T from "../base/Text";
 import Box from "../layout/Box";
-import LayoutForm from "../layout/LayoutForm";
 import DataContext from "../store/DataContext";
 import { getDateKey } from "../utils/getDateKey";
+import FormContainer from "./forms/FormContainer";
 import FormField from "./forms/FormField";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import T from "../base/Text";
-import { green, white } from "../base/colors";
 
 const Stack = createStackNavigator();
 
@@ -55,16 +55,12 @@ const EnterAll = ({ navigation }) => {
   );
 
   return (
-    <LayoutForm>
-      <Box row itemsCenter justifyBetween>
-        <Box w5 />
-        {!!trackers.length && (
-          <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
-        )}
-        <Box w5 itemsCenter justifyCenter>
-          <CloseButton to="Home" />
-        </Box>
-      </Box>
+    <FormContainer
+      closeTo="Home"
+      topLeft={
+        <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
+      }
+    >
       {!!trackers.length ? (
         <Stack.Navigator
           screenOptions={{
@@ -94,7 +90,7 @@ const EnterAll = ({ navigation }) => {
           </TouchableOpacity>
         </Box>
       )}
-    </LayoutForm>
+    </FormContainer>
   );
 };
 

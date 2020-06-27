@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from "react";
 import useKeyboard from "../utils/useKeyboard";
 import { Dimensions, View } from "react-native";
+import { useSafeArea } from "react-native-safe-area-context";
 
 interface UIContext {
   keyboardHeight: number;
   screenWidth: number;
   screenHeight: number;
+  safeWidth: number;
+  safeHeight: number;
+  isPortrait: boolean;
 }
 
 const UIContext = React.createContext<Partial<UIContext>>({
   keyboardHeight: 0,
   screenWidth: 0,
   screenHeight: 0,
+  safeWidth: 0,
+  safeHeight: 0,
+  isPortrait: true,
 });
 
 export const UIProvider = ({ children }) => {
+  const inset = useSafeArea();
   const keyboardHeight = useKeyboard();
   const [screenWidth, setScreenWidth] = useState(0);
   const [screenHeight, setScreenHeight] = useState(0);
+  const [safeWidth, setSafeWidth] = useState(0);
+  const [safeHeight, setSafeHeight] = useState(0);
 
   const onLayout = () => {
     const d = Dimensions.get("window");
     setScreenWidth(d.width);
     setScreenHeight(d.height);
+    setSafeWidth(d.width - inset.left - inset.right);
+    setSafeHeight(d.height - inset.top - inset.bottom);
   };
 
   return (
@@ -33,6 +45,9 @@ export const UIProvider = ({ children }) => {
           keyboardHeight,
           screenWidth,
           screenHeight,
+          safeWidth,
+          safeHeight,
+          isPortrait: screenWidth < screenHeight,
         }}
       >
         {children}

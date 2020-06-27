@@ -3,15 +3,13 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import React, { useContext, useMemo, useState } from "react";
-import { CloseButton } from "../base/IconButton";
-import Box from "../layout/Box";
-import LayoutForm from "../layout/LayoutForm";
 import DataContext, {
   emptySlider,
   emptyTracker,
   Tracker,
 } from "../store/DataContext";
 import FormField from "./forms/FormField";
+import FormContainer from "./forms/FormContainer";
 
 const Stack = createStackNavigator();
 
@@ -81,13 +79,7 @@ const TrackerForm = ({ navigation, route }) => {
   );
 
   return (
-    <LayoutForm>
-      <Box row itemsCenter justifyBetween>
-        <Box />
-        <Box w5 itemsCenter justifyCenter>
-          <CloseButton to="Home" />
-        </Box>
-      </Box>
+    <FormContainer closeTo="Home">
       <Stack.Navigator
         keyboardHandlingEnabled={false}
         screenOptions={{
@@ -101,7 +93,7 @@ const TrackerForm = ({ navigation, route }) => {
         <Stack.Screen name="TrackerLabel" component={SetLabel} />
         <Stack.Screen name="TrackerSlider" component={SetSlider} />
       </Stack.Navigator>
-    </LayoutForm>
+    </FormContainer>
   );
 };
 

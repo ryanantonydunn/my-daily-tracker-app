@@ -1,10 +1,8 @@
 import React, { useContext, useState } from "react";
 import DayShifter from "../base/DayShifter";
-import { CloseButton } from "../base/IconButton";
-import Box from "../layout/Box";
-import LayoutForm from "../layout/LayoutForm";
 import DataContext from "../store/DataContext";
-import { getDateKey, getDateFromKey } from "../utils/getDateKey";
+import { getDateFromKey, getDateKey } from "../utils/getDateKey";
+import FormContainer from "./forms/FormContainer";
 import FormField from "./forms/FormField";
 
 const EnterSingle = ({ route, navigation }) => {
@@ -17,14 +15,12 @@ const EnterSingle = ({ route, navigation }) => {
   const value = entry?.value || "";
 
   return (
-    <LayoutForm>
-      <Box row itemsCenter justifyBetween>
-        <Box w5 />
+    <FormContainer
+      closeTo="Home"
+      topLeft={
         <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
-        <Box w5 itemsCenter justifyCenter>
-          <CloseButton to="Home" />
-        </Box>
-      </Box>
+      }
+    >
       {!!tracker && (
         <FormField
           type={tracker.type}
@@ -39,7 +35,7 @@ const EnterSingle = ({ route, navigation }) => {
           slider={tracker.slider}
         />
       )}
-    </LayoutForm>
+    </FormContainer>
   );
 };
 

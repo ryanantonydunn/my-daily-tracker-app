@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { StyleSheet, View, LayoutChangeEvent } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { gray_400, white } from "../../base/colors";
-import Icon from "../../base/Icon";
+import { white } from "../../base/colors";
 import { ConfirmButton } from "../../base/IconButton";
 import T, { H2 } from "../../base/Text";
 import Box from "../../layout/Box";
@@ -18,6 +17,7 @@ import FormFieldSliderValues, {
 import FormFieldText from "./FormFieldText";
 import FormFieldTextSingle from "./FormFieldTextSingle";
 import FormFieldTrackerType from "./FormFieldTrackerType";
+import UIContext from "../../store/UIContext";
 
 type FormFieldType =
   | "boolean"
@@ -49,7 +49,6 @@ const components = {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     flex: 1,
     backgroundColor: white,
   },
@@ -61,8 +60,6 @@ const styles = StyleSheet.create({
   skipButtonContainer: {
     position: "absolute",
     bottom: 10,
-    left: "50%",
-    transform: [{ translateX: -40 }],
   },
   skipButton: {
     width: 80,
@@ -71,8 +68,8 @@ const styles = StyleSheet.create({
   },
   keyboardSubmit: {
     position: "absolute",
-    bottom: 10,
     right: 10,
+    bottom: 10,
   },
 });
 
@@ -92,6 +89,9 @@ const FormField = ({
   value,
   onSave,
 }: FormFieldProps) => {
+  const { screenHeight, isPortrait, keyboardHeight } = useContext(UIContext);
+  const [width, setWidth] = useState(0);
+
   const [tempValue, setTempValue] = useState(value);
 
   useEffect(() => setTempValue(value), [value]);
@@ -105,20 +105,25 @@ const FormField = ({
 
   const Component = components[type];
 
-  const keyboardHeight = useKeyboard();
-
-  const icon = trackerIcon(type);
-
   return (
     <View
+      onLayout={(e: LayoutChangeEvent) => {
+        setWidth(e.nativeEvent.layout.width);
+      }}
       style={[
         styles.container,
-        { marginBottom: hasKeyboard ? keyboardHeight : 0 },
+        {
+          marginBottom: keyboardHeight,
+          paddingLeft: isPortrait ? 0 : 180,
+          paddingRight: isPortrait ? 0 : 180,
+          paddingTop: isPortrait ? 80 : 32,
+          paddingBottom: isPortrait ? 80 : 20,
+        },
       ]}
     >
-      <Box flex1 p2 style={styles.content}>
+      <Box flex1>
         <H2>{title}</H2>
-        <Box h4 />
+        <Box style={{ height: screenHeight < 500 ? 10 : 40 }} />
         <Component
           slider={slider}
           value={tempValue}
@@ -128,10 +133,11 @@ const FormField = ({
             if (!isInvalid(type, newVal)) onSave(newVal);
           }}
         />
-        <Box h4 />
+        <Box h3 />
       </Box>
+
       {!!onSkip && (
-        <View style={styles.skipButtonContainer}>
+        <View style={[styles.skipButtonContainer, { left: width / 2 - 40 }]}>
           <TouchableOpacity style={styles.skipButton} onPress={() => onSkip()}>
             <T center light>
               Skip
