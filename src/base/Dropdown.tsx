@@ -1,14 +1,16 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Animated, StyleSheet, View, Dimensions } from "react-native";
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+import React, {
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
+import { Animated, Dimensions, StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { gray_400, gray_900, white } from "../base/colors";
 import T from "../base/Text";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-const { width, height } = Dimensions.get("window");
+import UIContext from "../store/UIContext";
 
 export interface DropdownItem {
   onPress?: Function;
@@ -30,12 +32,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    width,
-    height,
-  },
-  touchable: {
-    width,
-    height,
   },
   dropdown: {
     position: "absolute",
@@ -62,6 +58,9 @@ const renderChildren = (d: ReactNode | string) =>
   typeof d === "string" ? <T>{d}</T> : d;
 
 const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
+  const { screenWidth, screenHeight } = useContext(UIContext);
+  const fillStyle = { width: screenWidth, height: screenHeight };
+
   const [isRendered, setIsRendered] = useState(false);
   const y = useRef(new Animated.Value(-20));
   const opacity = useRef(new Animated.Value(0));
@@ -88,7 +87,7 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
 
   return (
     <>
-      <View style={styles.fillScreen}>
+      <View style={[styles.fillScreen, fillStyle]}>
         <SafeAreaView>
           <View style={{ flex: 1 }}>
             <Animated.View
@@ -120,11 +119,8 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
                 )
               )}
             </Animated.View>
-            <View style={styles.fillScreen}>
-              <TouchableOpacity
-                style={styles.touchable}
-                onPress={() => onClose()}
-              />
+            <View style={[styles.fillScreen, fillStyle]}>
+              <TouchableOpacity style={fillStyle} onPress={() => onClose()} />
             </View>
           </View>
         </SafeAreaView>
