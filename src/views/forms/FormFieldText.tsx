@@ -24,7 +24,10 @@ const styles = StyleSheet.create({
 const FormFieldText = ({ onChange, value }: FormFieldTextProps) => {
   const focusRef = useAutoFocus();
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="always"
+    >
       <TextInput
         ref={focusRef}
         multiline
