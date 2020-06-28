@@ -5,11 +5,12 @@ import {
 } from "@expo-google-fonts/lato";
 import { ZillaSlab_400Regular } from "@expo-google-fonts/zilla-slab";
 import React, { ReactNode, useMemo } from "react";
-import { StyleSheet, Text as RNText } from "react-native";
+import { StyleSheet, Text as RNText, TextStyle } from "react-native";
 import { gray_200, gray_500, gray_700, white } from "./colors";
 
 interface TextProps {
   children;
+  style?: TextStyle;
   serif?: boolean;
   xs?: boolean;
   sm?: boolean;
@@ -78,12 +79,14 @@ export const textStyles = StyleSheet.create({
   },
 });
 
-const T = ({ children, ...styleOptions }: TextProps) => {
+const T = ({ children, style, ...styleOptions }: TextProps) => {
   const propStyles = useMemo(
     () => Object.keys(styleOptions).map((key) => textStyles[key]),
     [styleOptions]
   );
-  return <RNText style={[textStyles.base, ...propStyles]}>{children}</RNText>;
+  return (
+    <RNText style={[textStyles.base, ...propStyles, style]}>{children}</RNText>
+  );
 };
 
 export const H1 = ({ children }: { children: ReactNode }) => (

@@ -34,7 +34,7 @@ const EnterAll = ({ navigation }) => {
   const screens = useMemo(
     () =>
       trackers.map((tracker, i) => {
-        const entry = getEntry(tracker.id, dateKey);
+        const entry = getEntry({ trackerId: tracker.id, dateKey });
         return () => (
           <FormField
             type={tracker.type}

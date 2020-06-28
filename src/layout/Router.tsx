@@ -4,7 +4,7 @@ import {
 } from "@react-navigation/stack";
 import React from "react";
 import EnterAll from "../views/EnterAll";
-import Home from "../views/Home";
+import Home from "../views/home/Home";
 import Sandbox from "../views/Sandbox";
 import TrackerForm from "../views/TrackerForm";
 import TrackerView from "../views/TrackerView";

@@ -71,9 +71,7 @@ const LayoutWithHeader = ({
           )}
         </Box>
       </SafeAreaView>
-      <SafeAreaView style={styles.fill}>
-        <View style={styles.content}>{children}</View>
-      </SafeAreaView>
+      {children}
       <Dropdown
         open={showDropdown}
         top={44}

@@ -11,7 +11,7 @@ const EnterSingle = ({ route, navigation }) => {
   const [date, setDate] = useState(getDateFromKey(paramDateKey));
   const dateKey = getDateKey(date);
   const tracker = getTracker(trackerId);
-  const entry = getEntry(trackerId, dateKey);
+  const entry = getEntry({ trackerId, dateKey });
   const value = entry?.value || "";
 
   return (

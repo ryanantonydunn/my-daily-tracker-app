@@ -10,6 +10,7 @@ import {
 import { white } from "../../base/colors";
 import { CloseButton } from "../../base/IconButton";
 import UIContext from "../../store/UIContext";
+import Box from "../../layout/Box";
 
 interface FormContainerProps {
   children: ReactNode;
@@ -55,14 +56,17 @@ const FormContainer = ({ children, closeTo, topLeft }: FormContainerProps) => {
             </View>
           )}
           {!!topLeft && (
-            <View
+            <Box
+              row
+              itemsCenter
+              justifyCenter
               style={[
                 styles.topLeft,
                 { left: isPortrait ? safeWidth / 2 - 75 : 10 },
               ]}
             >
               {topLeft}
-            </View>
+            </Box>
           )}
         </KeyboardAvoidingView>
       </SafeAreaView>
