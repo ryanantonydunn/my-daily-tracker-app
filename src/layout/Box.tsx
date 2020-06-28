@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode, useMemo } from "react";
+import React, { ReactNode, useMemo } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { white } from "../base/colors";
 

@@ -1,5 +1,12 @@
 import React, { ReactNode, useContext } from "react";
-import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { white } from "../../base/colors";
 import { CloseButton } from "../../base/IconButton";
 import UIContext from "../../store/UIContext";
@@ -37,7 +44,10 @@ const FormContainer = ({ children, closeTo, topLeft }: FormContainerProps) => {
     <>
       <StatusBar animated barStyle="dark-content" />
       <SafeAreaView style={styles.fill}>
-        <View style={styles.content}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          style={styles.content}
+        >
           {children}
           {!!closeTo && (
             <View style={styles.closeButton}>
@@ -54,7 +64,7 @@ const FormContainer = ({ children, closeTo, topLeft }: FormContainerProps) => {
               {topLeft}
             </View>
           )}
-        </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </>
   );

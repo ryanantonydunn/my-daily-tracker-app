@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, View, LayoutChangeEvent } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { white } from "../../base/colors";
 import { ConfirmButton } from "../../base/IconButton";
 import T, { H2 } from "../../base/Text";
 import Box from "../../layout/Box";
 import { SliderValues } from "../../store/DataContext";
-import { trackerIcon } from "../../utils/trackerTypes";
-import useKeyboard from "../../utils/useKeyboard";
+import UIContext from "../../store/UIContext";
 import FormFieldBoolean from "./FormFieldBoolean";
 import FormFieldNumber from "./FormFieldNumber";
 import FormFieldSlider from "./FormFieldSlider";
@@ -17,7 +16,6 @@ import FormFieldSliderValues, {
 import FormFieldText from "./FormFieldText";
 import FormFieldTextSingle from "./FormFieldTextSingle";
 import FormFieldTrackerType from "./FormFieldTrackerType";
-import UIContext from "../../store/UIContext";
 
 type FormFieldType =
   | "boolean"
@@ -49,7 +47,6 @@ const components = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: white,
   },
   content: {
@@ -89,7 +86,7 @@ const FormField = ({
   value,
   onSave,
 }: FormFieldProps) => {
-  const { screenHeight, isPortrait, keyboardHeight } = useContext(UIContext);
+  const { screenHeight, safeHeight, isPortrait } = useContext(UIContext);
   const [width, setWidth] = useState(0);
 
   const [tempValue, setTempValue] = useState(value);
@@ -113,12 +110,18 @@ const FormField = ({
       style={[
         styles.container,
         {
-          marginBottom: keyboardHeight,
           paddingLeft: isPortrait ? 0 : 180,
           paddingRight: isPortrait ? 0 : 180,
           paddingTop: isPortrait ? 80 : 32,
           paddingBottom: isPortrait ? 80 : 20,
         },
+        hasKeyboard
+          ? {
+              flex: 1,
+            }
+          : {
+              height: safeHeight,
+            },
       ]}
     >
       <Box flex1>
@@ -135,7 +138,6 @@ const FormField = ({
         />
         <Box h3 />
       </Box>
-
       {!!onSkip && (
         <View style={[styles.skipButtonContainer, { left: width / 2 - 40 }]}>
           <TouchableOpacity style={styles.skipButton} onPress={() => onSkip()}>

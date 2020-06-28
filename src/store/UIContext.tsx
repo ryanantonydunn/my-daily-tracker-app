@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import useKeyboard from "../utils/useKeyboard";
+import React, { useState } from "react";
 import { Dimensions, View } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 
@@ -23,7 +22,6 @@ const UIContext = React.createContext<Partial<UIContext>>({
 
 export const UIProvider = ({ children }) => {
   const inset = useSafeArea();
-  const keyboardHeight = useKeyboard();
   const [screenWidth, setScreenWidth] = useState(0);
   const [screenHeight, setScreenHeight] = useState(0);
   const [safeWidth, setSafeWidth] = useState(0);
@@ -42,7 +40,6 @@ export const UIProvider = ({ children }) => {
       <View onLayout={onLayout} />
       <UIContext.Provider
         value={{
-          keyboardHeight,
           screenWidth,
           screenHeight,
           safeWidth,

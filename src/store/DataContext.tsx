@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useKeyboard from "../utils/useKeyboard";
 
 export type TrackerType = "slider" | "number" | "text" | "boolean";
 
@@ -35,8 +34,6 @@ interface DataContext {
   getEntry: Function;
   addEntry: Function;
   editEntry: Function;
-
-  keyboardHeight: number;
 }
 
 const newId = () => `local-${String(Math.random()).slice(2)}`;
@@ -94,8 +91,6 @@ export const DataProvider = ({ children }) => {
       arr.map((d) => (d.id === entry.id ? { ...d, ...entry } : d))
     );
 
-  const keyboardHeight = useKeyboard();
-
   return (
     <DataContext.Provider
       value={{
@@ -109,7 +104,6 @@ export const DataProvider = ({ children }) => {
         getEntry,
         addEntry,
         editEntry,
-        keyboardHeight,
       }}
     >
       {children}
