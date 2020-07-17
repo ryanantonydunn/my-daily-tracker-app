@@ -1,9 +1,14 @@
 import React, { useContext, useState } from "react";
-import DayShifter from "../base/DayShifter";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { col } from "../base/colors";
+import IconButton from "../base/IconButton";
+import T, { H1 } from "../base/Text";
+import Box from "../layout/Box";
+import LayoutWithHeader from "../layout/LayoutWithHeader";
 import DataContext from "../store/DataContext";
 import { getDateFromKey, getDateKey } from "../utils/getDateKey";
-import FormContainer from "./forms/FormContainer";
-import FormField from "./forms/FormField";
+import { getTrackerComponent } from "./forms/FormField";
 
 const EnterSingle = ({ route, navigation }) => {
   const { trackerId, dateKey: paramDateKey } = route.params;
@@ -14,28 +19,53 @@ const EnterSingle = ({ route, navigation }) => {
   const entry = getEntry({ trackerId, dateKey });
   const value = entry?.value || "";
 
+  const FormFieldComponent = getTrackerComponent(tracker.type);
+
   return (
-    <FormContainer
-      closeTo="Home"
-      topLeft={
-        <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
-      }
-    >
-      {!!tracker && (
-        <FormField
-          type={tracker.type}
-          title={tracker.label}
-          onSave={(value) => {
-            entry
-              ? editEntry({ ...entry, value })
-              : addEntry({ trackerId: tracker.id, dateKey, id: "", value });
-            navigation.navigate("Home");
+    <LayoutWithHeader title={<H1>Make Entry</H1>} back="Home">
+      <ScrollView contentContainerStyle={{ flex: 1 }}>
+        <Box
+          h4
+          row
+          itemsCenter
+          justifyCenter
+          style={{
+            backgroundColor: col("gray-2"),
+            borderBottomColor: col("gray-4"),
+            borderBottomWidth: StyleSheet.hairlineWidth,
           }}
-          value={value}
-          slider={tracker.slider}
-        />
-      )}
-    </FormContainer>
+        >
+          <IconButton name="keyboard-arrow-left" color={col("gray-5")} />
+          <T sm>Jun 30 2020</T>
+          <IconButton name="keyboard-arrow-right" color={col("gray-5")} />
+        </Box>
+        <Box
+          flex1
+          itemsCenter
+          justifyCenter
+          style={{ backgroundColor: "white" }}
+        >
+          {!!tracker && (
+            <FormFieldComponent
+              title={tracker.label}
+              highlight={tracker.color}
+              value={value}
+              onSave={(value) => {
+                entry
+                  ? editEntry({ ...entry, value })
+                  : addEntry({
+                      trackerId: tracker.id,
+                      dateKey,
+                      id: "",
+                      value,
+                    });
+                navigation.navigate("Home");
+              }}
+            />
+          )}
+        </Box>
+      </ScrollView>
+    </LayoutWithHeader>
   );
 };
 

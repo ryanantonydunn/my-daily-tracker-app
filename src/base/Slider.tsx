@@ -6,15 +6,17 @@ import {
   ViewStyle,
 } from "react-native";
 import Box from "../layout/Box";
-import { gray_200, gray_400, green, white } from "./colors";
+import { gray_200, gray_400, green, white, col } from "./colors";
 import T from "./Text";
-import { SliderValues } from "../store/DataContext";
 
 interface SliderProps {
-  slider: SliderValues;
+  min?: number;
+  max?: number;
+  step?: number;
   onChange: Function;
   value: string;
   style?: ViewStyle;
+  highlight?: string;
 }
 
 // UI size values
@@ -54,9 +56,6 @@ const styles = StyleSheet.create({
   numberEdge: {
     backgroundColor: gray_200,
   },
-  numberValue: {
-    backgroundColor: green,
-  },
   touchable: {
     position: "absolute",
     zIndex: 20,
@@ -65,11 +64,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const Slider = ({ slider, onChange, value, style }: SliderProps) => {
-  const min = parseFloat(slider.min);
-  const max = parseFloat(slider.max);
-  const step = parseFloat(slider.step);
-
+const Slider = ({
+  min = 0,
+  max = 10,
+  step = 1,
+  highlight = col("green-5"),
+  onChange,
+  value,
+  style,
+}: SliderProps) => {
   const range = Math.max(max - min, 1);
   const xMultiplier = range / TRACK_WIDTH; // how much does a movement of one pixel equal
 
@@ -120,8 +123,10 @@ const Slider = ({ slider, onChange, value, style }: SliderProps) => {
             justifyCenter
             style={[
               styles.number,
-              styles.numberValue,
-              { left: parseFloat(value) / xMultiplier },
+              {
+                left: parseFloat(value) / xMultiplier,
+                backgroundColor: highlight,
+              },
             ]}
           >
             <T white>{value}</T>

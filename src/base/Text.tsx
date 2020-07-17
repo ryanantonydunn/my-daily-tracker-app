@@ -3,7 +3,9 @@ import {
   Lato_700Bold,
   useFonts,
 } from "@expo-google-fonts/lato";
+
 import { ZillaSlab_400Regular } from "@expo-google-fonts/zilla-slab";
+import { VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
 import React, { ReactNode, useMemo } from "react";
 import { StyleSheet, Text as RNText, TextStyle } from "react-native";
 import { gray_200, gray_500, gray_700, white } from "./colors";
@@ -12,6 +14,7 @@ interface TextProps {
   children;
   style?: TextStyle;
   serif?: boolean;
+  title?: boolean;
   xs?: boolean;
   sm?: boolean;
   md?: boolean;
@@ -29,6 +32,7 @@ export const FontProvider = ({ children }: { children: ReactNode }) => {
     Lato_400Regular,
     Lato_700Bold,
     ZillaSlab_400Regular,
+    VarelaRound_400Regular,
   });
   return fontsLoaded ? <>{children}</> : null;
 };
@@ -37,6 +41,7 @@ export const rem = (n: number) => 20 * n;
 
 export const sans = "Lato_400Regular";
 export const serif = "ZillaSlab_400Regular";
+export const title = "VarelaRound_400Regular";
 
 export const textStyles = StyleSheet.create({
   base: {
@@ -46,6 +51,9 @@ export const textStyles = StyleSheet.create({
   },
   serif: {
     fontFamily: serif,
+  },
+  title: {
+    fontFamily: title,
   },
   xs: {
     fontSize: rem(0.65),
@@ -90,13 +98,13 @@ const T = ({ children, style, ...styleOptions }: TextProps) => {
 };
 
 export const H1 = ({ children }: { children: ReactNode }) => (
-  <T serif xLight md>
+  <T title xLight>
     {children}
   </T>
 );
 
 export const H2 = ({ children }: { children: ReactNode }) => (
-  <T serif lg center>
+  <T title lg center>
     {children}
   </T>
 );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getDateKey } from "../utils/getDateKey";
 import sub from "date-fns/sub";
+import { green, blue_500, col } from "../base/colors";
 
 export type TrackerType = "slider" | "number" | "text" | "boolean";
 
@@ -16,6 +17,7 @@ export interface Tracker {
   type: TrackerType;
   streak: number;
   slider?: SliderValues;
+  color: string;
 }
 
 export interface Entry {
@@ -45,6 +47,7 @@ export const emptyTracker = (): Tracker => ({
   type: "boolean",
   label: "",
   streak: 0,
+  color: green,
 });
 
 export const emptySlider = (): SliderValues => ({
@@ -59,11 +62,28 @@ const startTrackers: Tracker[] = [
     type: "slider",
     label: "Happy",
     streak: 0,
-    slider: {
-      min: "0",
-      max: "10",
-      step: "1",
-    },
+    color: col("green-5"),
+  },
+  {
+    id: "126",
+    type: "slider",
+    label: "Anxious",
+    streak: 0,
+    color: col("red-5"),
+  },
+  {
+    id: "124",
+    type: "boolean",
+    label: "Meditation",
+    streak: 0,
+    color: col("yellow-6"),
+  },
+  {
+    id: "125",
+    type: "number",
+    label: "Run (km)",
+    streak: 0,
+    color: col("teal-5"),
   },
 ];
 

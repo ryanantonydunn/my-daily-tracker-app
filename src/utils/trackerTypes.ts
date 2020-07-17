@@ -1,7 +1,7 @@
 import { TrackerType } from "../store/DataContext";
 
 export const trackerTypes = [
-  { title: "Checkbox", icon: "check", value: "boolean" },
+  { title: "Checkbox", icon: "event-available", value: "boolean" },
   { title: "Slider", icon: "linear-scale", value: "slider" },
   { title: "Text", icon: "short-text", value: "text" },
   { title: "Number", icon: "all-inclusive", value: "number" },

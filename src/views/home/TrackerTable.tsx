@@ -15,10 +15,12 @@ import {
   red,
   white,
   yellow,
+  gray_200,
+  col,
 } from "../../base/colors";
 import Icon from "../../base/Icon";
 import IconButton from "../../base/IconButton";
-import T from "../../base/Text";
+import T, { rem } from "../../base/Text";
 import Box from "../../layout/Box";
 import DataContext from "../../store/DataContext";
 import { getDateKey } from "../../utils/getDateKey";
@@ -26,9 +28,9 @@ import { trackerIcon } from "../../utils/trackerTypes";
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: gray_800,
-    // borderBottomColor: gray_400,
-    // borderBottomWidth: StyleSheet.hairlineWidth,
+    backgroundColor: gray_200,
+    borderBottomColor: gray_400,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     paddingTop: 10,
     paddingBottom: 10,
   },
@@ -70,17 +72,64 @@ const prepareDates = (n, date) =>
   });
 
 const renderVal = ({ entry, tracker }) => {
-  if (!entry || !tracker) return null;
+  const empty = (
+    <Box
+      itemsCenter
+      justifyCenter
+      style={{
+        width: 40,
+        height: 40,
+        backgroundColor: col("white"),
+        borderRadius: 20,
+        borderColor: col("gray-4"),
+        borderWidth: StyleSheet.hairlineWidth,
+      }}
+    >
+      <Icon size={18} color={col("gray-4")} name="add" />
+    </Box>
+  );
+  if (!entry || !tracker) return empty;
   if (["number", "slider"].includes(tracker.type)) {
-    return <T xs>{entry.value}</T>;
+    return (
+      <Box
+        itemsCenter
+        justifyCenter
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: tracker.color,
+        }}
+      >
+        <T xs white>
+          {entry.value}
+        </T>
+      </Box>
+    );
   } else if (tracker.type === "boolean") {
-    if (entry.value === "true") {
-      return <Icon color={green} name="check" />;
-    } else {
-      return <Icon color={red} name="close" />;
-    }
+    return (
+      <Box
+        itemsCenter
+        justifyCenter
+        style={{
+          width: 40,
+          height: 40,
+          backgroundColor:
+            entry.value === "true" ? tracker.color : col("gray-4"),
+          borderRadius: 20,
+        }}
+      >
+        <Icon
+          color={col("white")}
+          name={entry.value === "true" ? "check" : "close"}
+          size={18}
+        />
+      </Box>
+    );
   } else if (tracker.type === "text" && entry.value) {
     return <Icon color={green} name="short-text" />;
+  } else {
+    return empty;
   }
 };
 
@@ -99,43 +148,53 @@ const TrackerTable = () => {
 
   return (
     <>
-      <Box style={[styles.header, leftRightSafe]}>
-        <Box flex1 row itemsCenter>
-          <Box flex1 />
-          <Box w5 itemsCenter justifyCenter>
-            <IconButton
-              name="keyboard-arrow-left"
-              color={gray_500}
-              onPress={() => setDate(sub(date, { days: numberOfDays }))}
-            />
+      <Box
+        row
+        itemsCenter
+        style={{
+          backgroundColor: col("gray-2"),
+          borderBottomColor: col("gray-4"),
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }}
+      >
+        <Box flex1 />
+        {dates.map(({ date }, i) => (
+          <Box
+            key={i}
+            itemsCenter
+            justifyCenter
+            w5
+            h4
+            style={{
+              backgroundColor: isToday(date) ? "#eeeac9" : col("gray-2"),
+            }}
+          >
+            <T
+              style={{
+                fontSize: rem(0.55),
+                textTransform: "uppercase",
+                color: isToday(date) ? col("gray-7") : col("gray-5"),
+              }}
+            >
+              {format(date, "eee d")}
+            </T>
           </Box>
-          {dates.map(({ date }, i) => (
-            <Box key={i} itemsCenter justifyCenter style={styles.date}>
-              <T sm style={{ color: gray_500 }}>
-                {format(date, "eeeee")}
-              </T>
-              <T style={{ color: gray_400 }}>{format(date, "d")}</T>
-              <T xs style={{ color: gray_500 }}>
-                {format(date, "MMM")}
-              </T>
-            </Box>
-          ))}
-          <Box w5 itemsCenter justifyCenter>
-            {!isToday(date) && (
-              <IconButton
-                name="keyboard-arrow-right"
-                color={gray_500}
-                onPress={() =>
-                  setDate(min([new Date(), sub(date, { days: -numberOfDays })]))
-                }
-              />
-            )}
-          </Box>
-        </Box>
+        ))}
+        <Box w1 />
       </Box>
+
       {trackers.map((tracker) => (
-        <Box key={tracker.id} style={[styles.row, leftRightSafe]}>
-          <Box flex1>
+        <Box
+          key={tracker.id}
+          flex1
+          row
+          style={{
+            alignItems: "stretch",
+            borderBottomColor: col("gray-4"),
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        >
+          <Box flex1 row itemsCenter>
             <TouchableOpacity
               style={styles.trackerLabel}
               onPress={() => {
@@ -144,17 +203,28 @@ const TrackerTable = () => {
             >
               <Icon
                 name={trackerIcon(tracker.type)}
-                color={gray_400}
-                size={18}
+                color={tracker.color}
+                size={20}
               />
               <Box w1 />
-              <T sm>{tracker.label}</T>
+              <T sm title>
+                {tracker.label}
+              </T>
             </TouchableOpacity>
           </Box>
-          {dates.map(({ dateKey }) => {
+          {dates.map(({ date, dateKey }) => {
             const entry = getEntry({ trackerId: tracker.id, dateKey });
             return (
-              <Box key={dateKey} style={styles.cell}>
+              <Box
+                key={dateKey}
+                itemsCenter
+                justifyCenter
+                w5
+                style={{
+                  height: 60,
+                  backgroundColor: isToday(date) ? "#fff7d0" : col("white"),
+                }}
+              >
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("EnterSingle", {
@@ -169,16 +239,7 @@ const TrackerTable = () => {
               </Box>
             );
           })}
-          <Box row w5 itemsCenter justifyCenter style={styles.cell}>
-            {!!tracker.streak && (
-              <>
-                <Icon color={yellow} name="star" size={16} />
-                <T xs style={{ marginLeft: 5, color: yellow }}>
-                  {tracker.streak}
-                </T>
-              </>
-            )}
-          </Box>
+          <Box w1 />
         </Box>
       ))}
     </>

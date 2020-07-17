@@ -8,8 +8,7 @@ import DataContext, {
   emptyTracker,
   Tracker,
 } from "../store/DataContext";
-import FormField from "./forms/FormField";
-import FormContainer from "./forms/FormContainer";
+import Box from "../layout/Box";
 
 const Stack = createStackNavigator();
 
@@ -33,53 +32,57 @@ const TrackerForm = ({ navigation, route }) => {
 
   const SetType = useMemo(
     () => () => (
-      <FormField
-        title="New Tracker Type"
-        type="trackerType"
-        onSave={(type) => {
-          setTracker((d) => ({ ...d, type }));
-          navigation.navigate("TrackerLabel");
-        }}
-      />
+      <Box />
+      // <FormField
+      //   title="New Tracker Type"
+      //   type="trackerType"
+      //   onSave={(type) => {
+      //     setTracker((d) => ({ ...d, type }));
+      //     navigation.navigate("TrackerLabel");
+      //   }}
+      // />
     ),
     [setTracker]
   );
 
   const SetLabel = useMemo(
     () => () => (
-      <FormField
-        title="Tracker Label"
-        type="textSingleLine"
-        value={tracker.label}
-        onSave={(label) => {
-          if (tracker.type === "slider") {
-            setTracker({ ...tracker, label });
-            navigation.navigate("TrackerSlider");
-          } else {
-            save({ ...tracker, label });
-          }
-        }}
-      />
+      <Box />
+      // <FormField
+      //   title="Tracker Label"
+      //   type="textSingleLine"
+      //   value={tracker.label}
+      //   onSave={(label) => {
+      //     if (tracker.type === "slider") {
+      //       setTracker({ ...tracker, label });
+      //       navigation.navigate("TrackerSlider");
+      //     } else {
+      //       save({ ...tracker, label });
+      //     }
+      //   }}
+      // />
     ),
     [setTracker, tracker]
   );
 
   const SetSlider = useMemo(
     () => () => (
-      <FormField
-        title="Slider values"
-        type="sliderValues"
-        value={tracker.slider || emptySlider()}
-        onSave={(slider) => {
-          save({ ...tracker, slider });
-        }}
-      />
+      <Box />
+      // <FormField
+      //   title="Slider values"
+      //   type="sliderValues"
+      //   value={tracker.slider || emptySlider()}
+      //   onSave={(slider) => {
+      //     save({ ...tracker, slider });
+      //   }}
+      // />
     ),
     [tracker]
   );
 
   return (
-    <FormContainer closeTo="Home">
+    <Box>
+      {/* <FormContainer closeTo="Home"> */}
       <Stack.Navigator
         keyboardHandlingEnabled={false}
         screenOptions={{
@@ -93,7 +96,8 @@ const TrackerForm = ({ navigation, route }) => {
         <Stack.Screen name="TrackerLabel" component={SetLabel} />
         <Stack.Screen name="TrackerSlider" component={SetSlider} />
       </Stack.Navigator>
-    </FormContainer>
+      {/* </FormContainer> */}
+    </Box>
   );
 };
 

@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import Box from "../../layout/Box";
 import IconButton, { ConfirmButton } from "../../base/IconButton";
-import { gray_400, red } from "../../base/colors";
+import { col, red } from "../../base/colors";
+import T from "../../base/Text";
+import { FormFieldProps } from "./FormField";
+import Icon from "../../base/Icon";
+import { trackerIcon } from "../../utils/trackerTypes";
+import UIContext from "../../store/UIContext";
 
-interface FormFieldBooleanProps {
-  onSave: Function;
-}
+const FormFieldBoolean = ({
+  title,
+  highlight,
+  value,
+  onSave,
+}: FormFieldProps) => {
+  const { safeHeight } = useContext(UIContext);
+  const height = safeHeight - 88;
 
-const FormFieldBoolean = ({ onSave }: FormFieldBooleanProps) => {
   return (
-    <Box flex1 itemsCenter justifyCenter>
+    <Box itemsCenter justifyCenter style={{ height }}>
+      <Box row>
+        <Icon name={trackerIcon("boolean")} color={highlight} />
+        <Box w1 />
+        <T lg title>
+          {title}
+        </T>
+      </Box>
+      <Box h2 />
       <Box row>
         <IconButton
-          xl
-          border={gray_400}
+          lg
+          border={col("gray-4")}
           color={red}
           name="close"
           onPress={() => onSave("false")}
@@ -21,6 +38,7 @@ const FormFieldBoolean = ({ onSave }: FormFieldBooleanProps) => {
         <Box w2 />
         <ConfirmButton onPress={() => onSave("true")} />
       </Box>
+      <Box h4 />
     </Box>
   );
 };

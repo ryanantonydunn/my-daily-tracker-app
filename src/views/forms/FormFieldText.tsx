@@ -3,11 +3,7 @@ import { StyleSheet } from "react-native";
 import { TextInput, ScrollView } from "react-native-gesture-handler";
 import { rem, textStyles } from "../../base/Text";
 import useAutoFocus from "../../utils/useAutoFocus";
-
-interface FormFieldTextProps {
-  value: any;
-  onChange: Function;
-}
+import { FormFieldProps } from "./FormField";
 
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const FormFieldText = ({ onChange, value }: FormFieldTextProps) => {
+const FormFieldText = ({ onSave, value }: FormFieldProps) => {
   const focusRef = useAutoFocus();
   return (
     <ScrollView
@@ -33,7 +29,7 @@ const FormFieldText = ({ onChange, value }: FormFieldTextProps) => {
         multiline
         blurOnSubmit={false}
         value={value}
-        onChangeText={(str) => onChange(str.substring(0, 2000))}
+        onChangeText={(str) => onSave(str.substring(0, 2000))}
         style={styles.input}
       />
     </ScrollView>

@@ -11,8 +11,6 @@ import T from "../base/Text";
 import Box from "../layout/Box";
 import DataContext from "../store/DataContext";
 import { getDateKey } from "../utils/getDateKey";
-import FormContainer from "./forms/FormContainer";
-import FormField from "./forms/FormField";
 
 const Stack = createStackNavigator();
 
@@ -36,31 +34,33 @@ const EnterAll = ({ navigation }) => {
       trackers.map((tracker, i) => {
         const entry = getEntry({ trackerId: tracker.id, dateKey });
         return () => (
-          <FormField
-            type={tracker.type}
-            title={tracker.label}
-            onSkip={() => next(i)}
-            onSave={(value) => {
-              entry
-                ? editEntry({ ...entry, value })
-                : addEntry({ trackerId: tracker.id, dateKey, id: "", value });
-              next(i);
-            }}
-            value={entry?.value || ""}
-            slider={tracker.slider}
-          />
+          <Box />
+          // <FormField
+          //   type={tracker.type}
+          //   title={tracker.label}
+          //   onSkip={() => next(i)}
+          //   onSave={(value) => {
+          //     entry
+          //       ? editEntry({ ...entry, value })
+          //       : addEntry({ trackerId: tracker.id, dateKey, id: "", value });
+          //     next(i);
+          //   }}
+          //   value={entry?.value || ""}
+          //   slider={tracker.slider}
+          // />
         );
       }),
     [trackers, next, dateKey]
   );
 
   return (
-    <FormContainer
+    <Box>
+      {/* <FormContainer
       closeTo="Home"
       topLeft={
         <DayShifter value={date} onChange={(newDate) => setDate(newDate)} />
       }
-    >
+    > */}
       {!!trackers.length ? (
         <Stack.Navigator
           screenOptions={{
@@ -90,7 +90,8 @@ const EnterAll = ({ navigation }) => {
           </TouchableOpacity>
         </Box>
       )}
-    </FormContainer>
+      {/* </FormContainer> */}
+    </Box>
   );
 };
 

@@ -11,6 +11,7 @@ interface IconButtonProps {
   bgColor?: string;
   border?: string;
   onPress?: Function;
+  sm?: boolean;
   lg?: boolean;
   xl?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -23,6 +24,10 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 99999,
+  },
+  sm: {
+    width: 32,
+    height: 32,
   },
   lg: {
     width: 64,
@@ -41,6 +46,7 @@ const IconButton = ({
   border,
   style,
   onPress,
+  sm,
   lg,
   xl,
 }: IconButtonProps) => {
@@ -52,13 +58,14 @@ const IconButton = ({
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: border,
       },
+      sm && styles.sm,
       lg && styles.lg,
       xl && styles.xl,
       style,
     ],
   };
 
-  const iconSize = xl ? 30 : lg ? 28 : 24;
+  const iconSize = xl ? 30 : lg ? 28 : sm ? 18 : 24;
   const renderIcon = <Icon name={name} size={iconSize} color={color} />;
 
   return onPress ? (
@@ -78,10 +85,10 @@ export const ConfirmButton = ({
   disabled?: boolean;
 }) =>
   disabled ? (
-    <IconButton xl border={gray_300} color={gray_300} name="check" />
+    <IconButton lg border={gray_300} color={gray_300} name="check" />
   ) : (
     <IconButton
-      xl
+      lg
       border={gray_400}
       color={green}
       name="check"
