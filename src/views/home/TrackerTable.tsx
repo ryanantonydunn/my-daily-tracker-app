@@ -88,7 +88,7 @@ const renderVal = ({ entry, tracker }) => {
       <Icon size={18} color={col("gray-4")} name="add" />
     </Box>
   );
-  if (!entry || !tracker) return empty;
+  if (!entry || !tracker || entry.value === "") return empty;
   if (["number", "slider"].includes(tracker.type)) {
     return (
       <Box
