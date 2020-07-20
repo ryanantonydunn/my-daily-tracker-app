@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
   View,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { gray_200, gray_900, white, green, col } from "../base/colors";
 import Dropdown, { DropdownItem } from "../base/Dropdown";
@@ -20,6 +21,7 @@ interface LayoutWithHeaderProps {
   back?: string | true;
   menu?: DropdownItem[];
   children: ReactNode;
+  hasKeyboard?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -46,12 +48,29 @@ const LayoutWithHeader = ({
   back,
   menu,
   children,
+  hasKeyboard = false,
 }: LayoutWithHeaderProps) => {
   const navigation = useNavigation();
   const [menuOpen, setMenuOpen] = useState(false);
   const showDropdown = menu?.length && menuOpen;
+
+  const Wrapper = useCallback(
+    ({ children }) =>
+      hasKeyboard ? (
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
+          {children}
+        </KeyboardAvoidingView>
+      ) : (
+        children
+      ),
+    [hasKeyboard]
+  );
+
   return (
-    <>
+    <Wrapper>
       <StatusBar animated barStyle="light-content" />
       <SafeAreaView style={styles.header}>
         <LinearGradient
@@ -102,7 +121,7 @@ const LayoutWithHeader = ({
         items={menu}
         onClose={() => setMenuOpen(false)}
       />
-    </>
+    </Wrapper>
   );
 };
 

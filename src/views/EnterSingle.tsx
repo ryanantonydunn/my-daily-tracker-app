@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { col } from "../base/colors";
 import IconButton from "../base/IconButton";
@@ -21,8 +21,14 @@ const EnterSingle = ({ route, navigation }) => {
 
   const FormFieldComponent = getTrackerComponent(tracker.type);
 
+  const hasKeyboard = ["number", "text"].includes(tracker.type);
+
   return (
-    <LayoutWithHeader title={<H1>Make Entry</H1>} back="Home">
+    <LayoutWithHeader
+      hasKeyboard={hasKeyboard}
+      title={<H1>Make Entry</H1>}
+      back="Home"
+    >
       <ScrollView contentContainerStyle={{ flex: 1 }}>
         <Box
           h4
