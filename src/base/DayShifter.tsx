@@ -1,7 +1,10 @@
 import format from "date-fns/format";
 import isAfter from "date-fns/isAfter";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
+import { StyleSheet } from "react-native";
 import Box from "../layout/Box";
+import { col } from "./colors";
 import IconButton from "./IconButton";
 import T from "./Text";
 
@@ -19,18 +22,30 @@ const DayShifter = ({ onChange, value, max = new Date() }: DayShifterProps) => {
   const tomorrow = new Date(year, month, day + 1);
   const hasTomorrowLink = !isAfter(tomorrow, max);
   return (
-    <Box row itemsCenter>
-      <Box w5 justifyCenter>
+    <Box
+      h4
+      row
+      itemsCenter
+      justifyCenter
+      style={{
+        backgroundColor: col("gray-2"),
+        borderBottomColor: col("gray-4"),
+        borderBottomWidth: StyleSheet.hairlineWidth,
+      }}
+    >
+      <Box w5>
         <IconButton
           name="keyboard-arrow-left"
+          color={col("gray-4")}
           onPress={() => onChange(yesterday)}
         />
       </Box>
-      <T light>{format(value, "EEE d MMM")}</T>
-      <Box w5 justifyCenter>
+      <T xs>{format(value, "EEE d MMM")}</T>
+      <Box w5>
         {hasTomorrowLink && (
           <IconButton
             name="keyboard-arrow-right"
+            color={col("gray-4")}
             onPress={() => onChange(tomorrow)}
           />
         )}

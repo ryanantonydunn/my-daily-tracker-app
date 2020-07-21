@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { col } from "../base/colors";
+import DayShifter from "../base/DayShifter";
 import IconButton from "../base/IconButton";
 import T, { H1 } from "../base/Text";
 import Box from "../layout/Box";
@@ -30,21 +31,7 @@ const EnterSingle = ({ route, navigation }) => {
       back="Home"
     >
       <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <Box
-          h4
-          row
-          itemsCenter
-          justifyCenter
-          style={{
-            backgroundColor: col("gray-2"),
-            borderBottomColor: col("gray-4"),
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        >
-          <IconButton name="keyboard-arrow-left" color={col("gray-5")} />
-          <T sm>Jun 30 2020</T>
-          <IconButton name="keyboard-arrow-right" color={col("gray-5")} />
-        </Box>
+        <DayShifter value={date} onChange={setDate} />
         <Box
           flex1
           itemsCenter
