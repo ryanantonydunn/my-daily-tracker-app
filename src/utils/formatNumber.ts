@@ -12,7 +12,7 @@ const formatNumber = (n: string, decimalPlaces: number = 2) => {
   }
 
   // join the dots back together
-  return decimals.join(".").substring(0, 10);
+  return decimals.join(".").substring(0, 8);
 };
 
 export default formatNumber;

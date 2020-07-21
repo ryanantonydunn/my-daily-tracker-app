@@ -1,28 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import format from "date-fns/format";
-import sub from "date-fns/sub";
-import min from "date-fns/min";
 import isToday from "date-fns/isToday";
 import React, { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useSafeArea } from "react-native-safe-area-context";
-import {
-  gray_400,
-  gray_500,
-  gray_800,
-  green,
-  red,
-  white,
-  yellow,
-  gray_200,
-  col,
-} from "../../base/colors";
+import { col, gray_200, gray_400, green, white } from "../../base/colors";
 import Icon from "../../base/Icon";
-import IconButton from "../../base/IconButton";
 import T, { rem } from "../../base/Text";
 import Box from "../../layout/Box";
 import DataContext from "../../store/DataContext";
+import UIContext from "../../store/UIContext";
 import { getDateKey } from "../../utils/getDateKey";
 import { trackerIcon } from "../../utils/trackerTypes";
 
@@ -90,6 +77,7 @@ const renderVal = ({ entry, tracker }) => {
   );
   if (!entry || !tracker || entry.value === "") return empty;
   if (["number", "slider"].includes(tracker.type)) {
+    const fontRem = 0.85 - entry.value.length * 0.07;
     return (
       <Box
         itemsCenter
@@ -101,7 +89,7 @@ const renderVal = ({ entry, tracker }) => {
           backgroundColor: tracker.color,
         }}
       >
-        <T xs white>
+        <T white style={{ fontSize: rem(fontRem) }}>
           {entry.value}
         </T>
       </Box>
@@ -134,17 +122,13 @@ const renderVal = ({ entry, tracker }) => {
 };
 
 const TrackerTable = () => {
-  const numberOfDays = 4;
+  const { screenWidth } = useContext(UIContext);
+
+  const numberOfDays = Math.floor((screenWidth - 160) / 50);
   const navigation = useNavigation();
   const [date, setDate] = useState(new Date());
   const dates = prepareDates(numberOfDays, date);
   const { trackers, getEntry } = useContext(DataContext);
-
-  const { left, right } = useSafeArea();
-  const leftRightSafe = {
-    paddingLeft: left,
-    paddingRight: right,
-  };
 
   return (
     <>
