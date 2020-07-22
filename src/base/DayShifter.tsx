@@ -23,32 +23,40 @@ const DayShifter = ({ onChange, value, max = new Date() }: DayShifterProps) => {
   const hasTomorrowLink = !isAfter(tomorrow, max);
   return (
     <Box
-      h4
+      h5
       row
       itemsCenter
-      justifyCenter
+      justifyBetween
       style={{
-        backgroundColor: col("gray-2"),
-        borderBottomColor: col("gray-4"),
+        backgroundColor: col("gray-1"),
+        borderBottomColor: col("gray-3"),
         borderBottomWidth: StyleSheet.hairlineWidth,
       }}
     >
-      <Box w5>
-        <IconButton
-          name="keyboard-arrow-left"
-          color={col("gray-4")}
-          onPress={() => onChange(yesterday)}
-        />
-      </Box>
-      <T xs>{format(value, "EEE d MMM")}</T>
-      <Box w5>
-        {hasTomorrowLink && (
+      <Box w5 />
+      <Box row itemsCenter justifyCenter>
+        <Box w5 itemsCenter>
           <IconButton
-            name="keyboard-arrow-right"
+            name="keyboard-arrow-left"
             color={col("gray-4")}
-            onPress={() => onChange(tomorrow)}
+            onPress={() => onChange(yesterday)}
           />
-        )}
+        </Box>
+        <T xs bold>
+          {format(value, "EEE d MMM")}
+        </T>
+        <Box w5 itemsCenter>
+          {hasTomorrowLink && (
+            <IconButton
+              name="keyboard-arrow-right"
+              color={col("gray-4")}
+              onPress={() => onChange(tomorrow)}
+            />
+          )}
+        </Box>
+      </Box>
+      <Box w5 itemsCenter>
+        <IconButton name="today" color={col("teal-5")} />
       </Box>
     </Box>
   );

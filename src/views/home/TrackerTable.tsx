@@ -5,6 +5,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { col, gray_200, gray_400, green, white } from "../../base/colors";
+import DayShifter from "../../base/DayShifter";
 import Icon from "../../base/Icon";
 import T, { rem } from "../../base/Text";
 import Box from "../../layout/Box";
@@ -132,14 +133,17 @@ const TrackerTable = () => {
 
   return (
     <>
+      <DayShifter value={date} onChange={setDate} />
       <Box
         row
         itemsCenter
-        style={{
-          backgroundColor: col("gray-2"),
-          borderBottomColor: col("gray-4"),
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        }}
+        style={
+          {
+            // backgroundColor: col("gray-1"),
+            // borderBottomColor: col("gray-3"),
+            // borderBottomWidth: StyleSheet.hairlineWidth,
+          }
+        }
       >
         <Box flex1 />
         {dates.map(({ date }, i) => (
@@ -148,20 +152,25 @@ const TrackerTable = () => {
             itemsCenter
             justifyCenter
             w5
-            h4
+            h5
             style={{
-              backgroundColor: isToday(date) ? "#eeeac9" : col("gray-2"),
+              backgroundColor: isToday(date) ? col("yellow-2") : col("white"),
+              borderBottomColor: isToday(date)
+                ? col("yellow-4")
+                : col("gray-3"),
+              borderBottomWidth: StyleSheet.hairlineWidth,
             }}
           >
             <T
+              light
               style={{
                 fontSize: rem(0.55),
                 textTransform: "uppercase",
-                color: isToday(date) ? col("gray-7") : col("gray-5"),
               }}
             >
-              {format(date, "eee d")}
+              {format(date, "eee")}
             </T>
+            <T sm>{format(date, "d")}</T>
           </Box>
         ))}
         <Box w1 />
@@ -174,7 +183,7 @@ const TrackerTable = () => {
           row
           style={{
             alignItems: "stretch",
-            borderBottomColor: col("gray-4"),
+            borderBottomColor: col("gray-3"),
             borderBottomWidth: StyleSheet.hairlineWidth,
           }}
         >
@@ -191,7 +200,7 @@ const TrackerTable = () => {
                 size={20}
               />
               <Box w1 />
-              <T sm title>
+              <T xs title>
                 {tracker.label}
               </T>
             </TouchableOpacity>
@@ -206,7 +215,9 @@ const TrackerTable = () => {
                 w5
                 style={{
                   height: 60,
-                  backgroundColor: isToday(date) ? "#fff7d0" : col("white"),
+                  backgroundColor: isToday(date)
+                    ? col("yellow-2")
+                    : col("white"),
                 }}
               >
                 <TouchableOpacity

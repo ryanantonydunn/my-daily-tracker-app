@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { col, gray_900, white } from "../../base/colors";
+import DayShifter from "../../base/DayShifter";
 import Icon from "../../base/Icon";
 import Logo from "../../base/Logo";
 import T from "../../base/Text";
@@ -28,8 +29,8 @@ const styles = StyleSheet.create({
   },
   buttonRight: {
     position: "absolute",
-    bottom: 20,
-    right: 20,
+    bottom: 15,
+    right: 15,
   },
   buttonPaddingOnTable: {
     height: 100,
@@ -74,13 +75,13 @@ const Home = ({ navigation }) => {
           <View style={styles.buttonRight}>
             <TouchableOpacity
               style={{
-                width: 70,
-                height: 70,
+                width: 60,
+                height: 60,
                 alignItems: "center",
                 justifyContent: "center",
                 borderWidth: 2,
                 borderColor: col("white"),
-                borderRadius: 35,
+                borderRadius: 30,
                 overflow: "hidden",
               }}
               onPress={() => navigation.navigate("EnterAll")}
