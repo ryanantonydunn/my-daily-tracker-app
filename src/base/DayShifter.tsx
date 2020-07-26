@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import format from "date-fns/format";
 import isAfter from "date-fns/isAfter";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet } from "react-native";
 import Box from "../layout/Box";
+import { getDateKey } from "../utils/getDateKey";
 import { col } from "./colors";
 import IconButton from "./IconButton";
 import T from "./Text";
@@ -12,9 +14,17 @@ interface DayShifterProps {
   onChange: Function;
   value: Date;
   max?: Date;
+  page: string;
 }
 
-const DayShifter = ({ onChange, value, max = new Date() }: DayShifterProps) => {
+const DayShifter = ({
+  onChange,
+  value,
+  max = new Date(),
+  page,
+}: DayShifterProps) => {
+  const navigation = useNavigation();
+
   const day = value.getDate();
   const month = value.getMonth();
   const year = value.getFullYear();
@@ -43,7 +53,7 @@ const DayShifter = ({ onChange, value, max = new Date() }: DayShifterProps) => {
           />
         </Box>
         <T xs bold>
-          {format(value, "EEE d MMM")}
+          {format(value, "d MMM yyyy")}
         </T>
         <Box w5 itemsCenter>
           {hasTomorrowLink && (
@@ -56,7 +66,16 @@ const DayShifter = ({ onChange, value, max = new Date() }: DayShifterProps) => {
         </Box>
       </Box>
       <Box w5 itemsCenter>
-        <IconButton name="today" color={col("teal-5")} />
+        <IconButton
+          name="today"
+          color={col("teal-5")}
+          onPress={() => {
+            navigation.navigate("ChooseDate", {
+              current: value.toISOString(),
+              page,
+            });
+          }}
+        />
       </Box>
     </Box>
   );

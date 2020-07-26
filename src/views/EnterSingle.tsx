@@ -31,7 +31,7 @@ const EnterSingle = ({ route, navigation }) => {
       back="Home"
     >
       <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <DayShifter value={date} onChange={setDate} />
+        <DayShifter value={date} onChange={setDate} page="EnterSingle" />
         <Box
           flex1
           itemsCenter

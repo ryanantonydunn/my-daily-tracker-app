@@ -122,18 +122,16 @@ const renderVal = ({ entry, tracker }) => {
   }
 };
 
-const TrackerTable = () => {
+const TrackerTable = ({ date }) => {
   const { screenWidth } = useContext(UIContext);
 
   const numberOfDays = Math.floor((screenWidth - 160) / 50);
   const navigation = useNavigation();
-  const [date, setDate] = useState(new Date());
   const dates = prepareDates(numberOfDays, date);
   const { trackers, getEntry } = useContext(DataContext);
 
   return (
     <>
-      <DayShifter value={date} onChange={setDate} />
       <Box
         row
         itemsCenter

@@ -94,7 +94,10 @@ const styles = StyleSheet.create({
 const Box = ({ component, children, style, ...styleOptions }: BoxProps) => {
   const Component = component ? component : View;
   const propStyles = useMemo(
-    () => Object.keys(styleOptions).map((key) => styles[key]),
+    () =>
+      Object.keys(styleOptions)
+        .filter((key) => styleOptions[key])
+        .map((key) => styles[key]),
     [styleOptions]
   );
   return <Component style={[...propStyles, style]}>{children}</Component>;

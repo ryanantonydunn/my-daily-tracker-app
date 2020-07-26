@@ -89,7 +89,10 @@ export const textStyles = StyleSheet.create({
 
 const T = ({ children, style, ...styleOptions }: TextProps) => {
   const propStyles = useMemo(
-    () => Object.keys(styleOptions).map((key) => textStyles[key]),
+    () =>
+      Object.keys(styleOptions)
+        .filter((key) => styleOptions[key])
+        .map((key) => textStyles[key]),
     [styleOptions]
   );
   return (

@@ -1,11 +1,12 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { col, gray_900, white } from "../../base/colors";
 import DayShifter from "../../base/DayShifter";
 import Icon from "../../base/Icon";
+import IconButton from "../../base/IconButton";
 import Logo from "../../base/Logo";
 import T from "../../base/Text";
 import Box from "../../layout/Box";
@@ -37,7 +38,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const Home = ({ navigation }) => {
+const Home = ({ route, navigation }) => {
+  const date = new Date(route.params.date);
+  const setDate = (date) => navigation.setParams({ date: date.toISOString() });
+
   return (
     <LayoutWithHeader
       title={<Logo />}
@@ -49,7 +53,8 @@ const Home = ({ navigation }) => {
       ]}
     >
       <Box flex1 bgWhite component={ScrollView}>
-        <TrackerTable />
+        <DayShifter value={date} onChange={setDate} page="Home" />
+        <TrackerTable date={date} />
         <Box h1 />
         <Box>
           <TouchableOpacity

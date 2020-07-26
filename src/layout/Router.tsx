@@ -3,21 +3,23 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import React from "react";
+import ChooseDate from "../views/ChooseDate";
 import EnterAll from "../views/EnterAll";
+import EnterSingle from "../views/EnterSingle";
 import Home from "../views/home/Home";
 import Sandbox from "../views/Sandbox";
 import TrackerForm from "../views/TrackerForm";
 import TrackerView from "../views/TrackerView";
-import EnterSingle from "../views/EnterSingle";
 
 export type StackParamList = {
-  Home: undefined;
+  Home: { date: string };
   Sandbox: undefined;
   TrackerView: { trackerId: string };
   AddTracker: undefined;
   EditTracker: { trackerId: string };
   EnterAll: undefined;
   EnterSingle: { trackerId: string; dateKey: string };
+  ChooseDate: { current: string; page: string };
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -30,7 +32,11 @@ const Router = () => {
         ...TransitionPresets.SlideFromRightIOS,
       }}
     >
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        initialParams={{ date: new Date().toISOString() }}
+      />
       <Stack.Screen name="Sandbox" component={Sandbox} />
       <Stack.Screen
         name="TrackerView"
@@ -45,6 +51,7 @@ const Router = () => {
       />
       <Stack.Screen name="EnterAll" component={EnterAll} />
       <Stack.Screen name="EnterSingle" component={EnterSingle} />
+      <Stack.Screen name="ChooseDate" component={ChooseDate} />
     </Stack.Navigator>
   );
 };
