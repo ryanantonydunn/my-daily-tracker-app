@@ -128,7 +128,7 @@ const TrackerTable = ({ date }) => {
   const numberOfDays = Math.floor((screenWidth - 160) / 50);
   const navigation = useNavigation();
   const dates = prepareDates(numberOfDays, date);
-  const { trackers, getEntry } = useContext(DataContext);
+  const { trackers, getEntry, addEntry, editEntry } = useContext(DataContext);
 
   return (
     <>
@@ -220,10 +220,28 @@ const TrackerTable = ({ date }) => {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("EnterSingle", {
-                      trackerId: tracker.id,
-                      dateKey,
-                    });
+                    if (tracker.type === "boolean") {
+                      const entry = getEntry({
+                        trackerId: tracker.id,
+                        dateKey,
+                      });
+                      entry
+                        ? editEntry({
+                            ...entry,
+                            value: entry.value === "true" ? "false" : "true",
+                          })
+                        : addEntry({
+                            trackerId: tracker.id,
+                            dateKey,
+                            id: "",
+                            value: "true",
+                          });
+                    } else {
+                      navigation.navigate("EnterSingle", {
+                        trackerId: tracker.id,
+                        dateKey,
+                      });
+                    }
                   }}
                   style={styles.entry}
                 >
