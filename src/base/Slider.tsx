@@ -5,8 +5,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import Box from "../layout/Box";
-import { gray_200, gray_400, green, white, col } from "./colors";
+import { col, tw } from "./styles/tailwind";
 import T from "./Text";
 
 interface SliderProps {
@@ -37,25 +36,30 @@ const TRACK_WIDTH = CONTAINER_WIDTH - TRACK_START * 2;
 const styles = StyleSheet.create({
   container: {
     position: "relative",
+    borderWidth: BORDER_WIDTH,
+    borderColor: col("gray-400"),
+    backgroundColor: col("white"),
     width: CONTAINER_WIDTH,
     height: CONTAINER_HEIGHT,
     borderRadius: CONTAINER_HEIGHT / 2,
-    borderWidth: BORDER_WIDTH,
-    borderColor: gray_400,
-    backgroundColor: white,
     padding: PADDING,
   },
+  track: tw(`flex-row items-center justify-between`),
   number: {
     position: "absolute",
     zIndex: 0,
     top: 0,
+    alignItems: "center",
+    justifyContent: "center",
     width: NUMBER_RADIUS * 2,
     height: NUMBER_RADIUS * 2,
     borderRadius: NUMBER_RADIUS,
   },
+  numberText: tw(`text-sm text-gray-400`),
   numberEdge: {
-    backgroundColor: gray_200,
+    backgroundColor: col("gray-200"),
   },
+  highlightText: tw(`text-white`),
   touchable: {
     position: "absolute",
     zIndex: 20,
@@ -99,12 +103,10 @@ const Slider = ({
   const edge = (i: number) => i === 0 || i === numbers.length - 1;
 
   return (
-    <View style={[styles.container, style, { position: "relative" }]}>
-      <Box row itemsCenter justifyBetween>
+    <View style={[styles.container, style]}>
+      <View style={styles.track}>
         {numbers.map((n, i) => (
-          <Box
-            itemsCenter
-            justifyCenter
+          <View
             key={n}
             style={[
               styles.number,
@@ -112,27 +114,25 @@ const Slider = ({
               { left: n / xMultiplier },
             ]}
           >
-            <T xs light bold={edge(i)}>
+            <T style={styles.numberText} bold={edge(i)}>
               {n}
             </T>
-          </Box>
+          </View>
         ))}
         {value !== "" && (
-          <Box
-            itemsCenter
-            justifyCenter
+          <View
             style={[
               styles.number,
               {
                 left: parseFloat(value) / xMultiplier,
-                backgroundColor: highlight,
+                backgroundColor: col(highlight),
               },
             ]}
           >
-            <T white>{value}</T>
-          </Box>
+            <T style={styles.highlightText}>{value}</T>
+          </View>
         )}
-      </Box>
+      </View>
       <View
         style={styles.touchable}
         onTouchStart={(e) => handleTouch(e)}

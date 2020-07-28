@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { gray_500 } from "./colors";
+import { col } from "./styles/tailwind";
 
 interface IconProps {
   name: string;
@@ -8,8 +8,8 @@ interface IconProps {
   color?: string;
 }
 
-const Icon = ({ name, size = 24, color = gray_500 }: IconProps) => (
-  <MaterialIcons name={name} size={size} color={color} />
+const Icon = ({ name, size = 24, color = "gray-500" }: IconProps) => (
+  <MaterialIcons name={name} size={size} color={col(color)} />
 );
 
 export default Icon;

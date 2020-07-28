@@ -1,16 +1,16 @@
 import React, {
   ReactNode,
+  useContext,
   useEffect,
   useRef,
   useState,
-  useContext,
 } from "react";
-import { Animated, Dimensions, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { gray_400, gray_900, white } from "../base/colors";
-import T from "../base/Text";
 import UIContext from "../store/UIContext";
+import { col, tw } from "./styles/tailwind";
+import T from "./Text";
 
 export interface DropdownItem {
   onPress?: Function;
@@ -28,30 +28,20 @@ interface DropdownProps {
 }
 
 const styles = StyleSheet.create({
-  fillScreen: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-  },
-  dropdown: {
-    position: "absolute",
-    zIndex: 10,
-    width: 150,
-    paddingTop: 5,
-    paddingBottom: 5,
-    backgroundColor: white,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: gray_400,
+  fill: tw(`flex-1`),
+  fillScreen: tw(`absolute top-0 left-0`),
+  dropdown: tw(`
+    absolute z-10 w-48 pt-1 pb-1
+    bg-white border border-gray-400 rounded-md
+  `),
+  dropdownShadow: {
     elevation: 5,
-    shadowColor: gray_900,
+    shadowColor: col("gray-900"),
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
     shadowOpacity: 0.2,
-    borderRadius: 2,
   },
-  dropdownItem: {
-    padding: 15,
-  },
+  dropdownItem: tw(`p-4`),
 });
 
 const renderChildren = (d: ReactNode | string) =>
@@ -89,10 +79,11 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
     <>
       <View style={[styles.fillScreen, fillStyle]}>
         <SafeAreaView>
-          <View style={{ flex: 1 }}>
+          <View style={styles.fill}>
             <Animated.View
               style={[
                 styles.dropdown,
+                styles.dropdownShadow,
                 {
                   ...position,
                   opacity: opacity.current,

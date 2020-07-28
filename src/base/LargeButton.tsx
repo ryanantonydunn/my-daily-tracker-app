@@ -1,9 +1,14 @@
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
+import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Box from "../layout/Box";
-import { col } from "./colors";
+import Gradient from "./Gradient";
+import { tw } from "./styles/tailwind";
 import T from "./Text";
+
+const styles = StyleSheet.create({
+  container: tw(`rounded-md overflow-hidden p-3`),
+  text: tw(`text-center text-white`),
+});
 
 interface LargeButtonProps {
   onPress: Function;
@@ -11,39 +16,11 @@ interface LargeButtonProps {
   title: string;
 }
 
-const LargeButton = ({
-  onPress,
-  secondary = false,
-  title,
-}: LargeButtonProps) => {
+const LargeButton = ({ onPress, title }: LargeButtonProps) => {
   return (
-    <TouchableOpacity
-      onPress={() => onPress()}
-      style={{
-        borderRadius: 5,
-        overflow: "hidden",
-      }}
-    >
-      <LinearGradient
-        colors={[col("green-5"), col("teal-5")]}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 1, y: 1 }}
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      />
-      <Box
-        bgWhite={secondary}
-        style={{ padding: 10, margin: 2, borderRadius: 3 }}
-      >
-        <T sm center white={!secondary}>
-          {title}
-        </T>
-      </Box>
+    <TouchableOpacity onPress={() => onPress()} style={styles.container}>
+      <Gradient col1="green-500" col2="teal-500" />
+      <T style={styles.text}>{title}</T>
     </TouchableOpacity>
   );
 };

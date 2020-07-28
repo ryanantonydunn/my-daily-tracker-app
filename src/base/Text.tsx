@@ -1,14 +1,12 @@
 import {
-  Lato_400Regular,
-  Lato_700Bold,
+  Nunito_400Regular,
+  Nunito_700Bold,
   useFonts,
-} from "@expo-google-fonts/lato";
-
-import { ZillaSlab_400Regular } from "@expo-google-fonts/zilla-slab";
-import { VarelaRound_400Regular } from "@expo-google-fonts/varela-round";
+} from "@expo-google-fonts/nunito";
 import React, { ReactNode, useMemo } from "react";
 import { StyleSheet, Text as RNText, TextStyle } from "react-native";
-import { gray_200, gray_500, gray_700, white } from "./colors";
+import { gray_200, gray_500, white } from "./colors";
+import { col } from "./styles/tailwind";
 
 interface TextProps {
   children;
@@ -29,31 +27,31 @@ interface TextProps {
 
 export const FontProvider = ({ children }: { children: ReactNode }) => {
   let [fontsLoaded] = useFonts({
-    Lato_400Regular,
-    Lato_700Bold,
-    ZillaSlab_400Regular,
-    VarelaRound_400Regular,
+    Nunito_400Regular,
+    Nunito_700Bold,
   });
   return fontsLoaded ? <>{children}</> : null;
 };
 
 export const rem = (n: number) => 20 * n;
 
-export const sans = "Lato_400Regular";
-export const serif = "ZillaSlab_400Regular";
-export const title = "VarelaRound_400Regular";
+export const sans = "Nunito_400Regular";
+export const bold = "Nunito_700Bold";
 
 export const textStyles = StyleSheet.create({
   base: {
     fontFamily: sans,
     fontSize: rem(0.875),
-    color: gray_700,
+    color: col("gray-700"),
+  },
+  bold: {
+    fontFamily: bold,
   },
   serif: {
-    fontFamily: serif,
+    fontFamily: sans,
   },
   title: {
-    fontFamily: title,
+    fontFamily: sans,
   },
   xs: {
     fontSize: rem(0.65),
@@ -69,9 +67,6 @@ export const textStyles = StyleSheet.create({
   },
   xl: {
     fontSize: rem(1.225),
-  },
-  bold: {
-    fontFamily: "Lato_700Bold",
   },
   light: {
     color: gray_500,
