@@ -31,7 +31,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "tailwind": "create-tailwind-rn && mv ./styles.json ./src/base/styles/styles.json"
   },
   "private": true
 }
