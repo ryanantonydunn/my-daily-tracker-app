@@ -33,14 +33,8 @@ const styles = StyleSheet.create({
   dropdown: tw(`
     absolute z-10 w-48 pt-1 pb-1
     bg-white border border-gray-400 rounded-md
+    shadow
   `),
-  dropdownShadow: {
-    elevation: 5,
-    shadowColor: col("gray-900"),
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 5,
-    shadowOpacity: 0.2,
-  },
   dropdownItem: tw(`p-4`),
 });
 
@@ -83,7 +77,6 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
             <Animated.View
               style={[
                 styles.dropdown,
-                styles.dropdownShadow,
                 {
                   ...position,
                   opacity: opacity.current,

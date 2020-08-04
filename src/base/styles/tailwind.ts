@@ -33,5 +33,18 @@ Object.entries(styles).forEach(([key, properties]) => {
   }
 });
 
+/**
+ * Add a basic shadow
+ */
+Object.assign(styles, {
+  shadow: {
+    elevation: 5,
+    shadowColor: "#1a202c",
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    shadowOpacity: 0.2,
+  },
+});
+
 const { tailwind, getColor } = create(styles);
 export { tailwind as tw, getColor as col };
