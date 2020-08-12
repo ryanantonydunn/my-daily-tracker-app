@@ -7,13 +7,11 @@ import ChooseDate from "../views/ChooseDate";
 import EnterAll from "../views/EnterAll";
 import EnterSingle from "../views/EnterSingle";
 import Home from "../views/home/Home";
-import Sandbox from "../views/Sandbox";
 import TrackerForm from "../views/TrackerForm";
 import TrackerView from "../views/TrackerView";
 
 export type StackParamList = {
   Home: { date: string };
-  Sandbox: undefined;
   TrackerView: { trackerId: string };
   AddTracker: undefined;
   EditTracker: { trackerId: string };
@@ -37,7 +35,6 @@ const Router = () => {
         component={Home}
         initialParams={{ date: new Date().toISOString() }}
       />
-      <Stack.Screen name="Sandbox" component={Sandbox} />
       <Stack.Screen
         name="TrackerView"
         component={TrackerView}

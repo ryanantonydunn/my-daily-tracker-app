@@ -1,54 +1,50 @@
 import { useNavigation } from "@react-navigation/native";
 import format from "date-fns/format";
 import isToday from "date-fns/isToday";
-import React, { useContext, useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { col, gray_200, gray_400, green, white } from "../../base/colors";
-import DayShifter from "../../base/DayShifter";
 import Icon from "../../base/Icon";
-import T, { rem } from "../../base/Text";
-import Box from "../../layout/Box";
+import { col, tw } from "../../base/styles/tailwind";
+import T from "../../base/Text";
+import TrackerTitle from "../../base/TrackerTitle";
 import DataContext from "../../store/DataContext";
 import UIContext from "../../store/UIContext";
 import { getDateKey } from "../../utils/getDateKey";
-import { trackerIcon } from "../../utils/trackerTypes";
+
+const CELL_SIZE = 50;
 
 const styles = StyleSheet.create({
-  header: {
-    backgroundColor: gray_200,
-    borderBottomColor: gray_400,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingTop: 10,
-    paddingBottom: 10,
+  days: tw(`flex-row items-center justify-end pr-3 border-b border-gray-300`),
+  day: {
+    ...tw(`items-center justify-center bg-white`),
+    width: CELL_SIZE,
+    height: CELL_SIZE,
   },
-  date: {
-    width: 50,
+  today: tw(`bg-yellow-200`),
+  dayText: tw(`text-gray-500 text-xs uppercase`),
+  dateText: tw(``),
+
+  trackerRow: tw(`flex-row items-stretch border-b border-gray-300 pr-3`),
+  trackerLabelContainer: tw(`flex-1`),
+  trackerLabelButton: {
+    ...tw(`flex-1 justify-center items-start pl-2`),
+    height: CELL_SIZE + 10,
   },
-  row: {
-    flexDirection: "row",
-    backgroundColor: white,
-    borderBottomColor: gray_400,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+
+  entryContainer: {
+    ...tw(`items-center justify-center`),
+    width: CELL_SIZE,
+    height: CELL_SIZE + 10,
   },
-  cell: {
-    borderLeftColor: gray_400,
-    borderLeftWidth: StyleSheet.hairlineWidth,
-  },
-  trackerLabel: {
-    height: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: 10,
-  },
-  entry: {
-    height: 50,
-    width: 50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
+  valueBall: tw(`items-center justify-center w-10 h-10 rounded-full`),
+  valueEmpty: tw(`bg-white border border-gray-400`),
 });
 
+/**
+ * Build the array of dates to query
+ */
 const prepareDates = (n, date) =>
   Array.from({ length: n }).map((_, i) => {
     const d = new Date(date);
@@ -59,199 +55,120 @@ const prepareDates = (n, date) =>
     };
   });
 
+/**
+ * Render the value of an entry in the table
+ */
 const renderVal = ({ entry, tracker }) => {
   const empty = (
-    <Box
-      itemsCenter
-      justifyCenter
-      style={{
-        width: 40,
-        height: 40,
-        backgroundColor: col("white"),
-        borderRadius: 20,
-        borderColor: col("gray-4"),
-        borderWidth: StyleSheet.hairlineWidth,
-      }}
-    >
-      <Icon size={18} color={col("gray-4")} name="add" />
-    </Box>
+    <View style={[styles.valueBall, styles.valueEmpty]}>
+      <Icon size={18} color="gray-400" name="add" />
+    </View>
   );
   if (!entry || !tracker || entry.value === "") return empty;
+
+  // Numbers
   if (["number", "slider"].includes(tracker.type)) {
-    const fontRem = 0.85 - entry.value.length * 0.07;
+    const fontSize = (0.85 - entry.value.length * 0.07) * 20;
     return (
-      <Box
-        itemsCenter
-        justifyCenter
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: 20,
-          backgroundColor: tracker.color,
-        }}
-      >
-        <T white style={{ fontSize: rem(fontRem) }}>
-          {entry.value}
-        </T>
-      </Box>
+      <View style={[styles.valueBall, { backgroundColor: col(tracker.color) }]}>
+        <T style={{ color: "white", fontSize }}>{entry.value}</T>
+      </View>
     );
+
+    // Booleans
   } else if (tracker.type === "boolean") {
     return (
-      <Box
-        itemsCenter
-        justifyCenter
-        style={{
-          width: 40,
-          height: 40,
-          backgroundColor:
-            entry.value === "true" ? tracker.color : col("gray-4"),
-          borderRadius: 20,
-        }}
+      <View
+        style={[
+          styles.valueBall,
+          {
+            backgroundColor:
+              entry.value === "true" ? col(tracker.color) : col("gray-400"),
+          },
+        ]}
       >
         <Icon
-          color={col("white")}
+          color="white"
           name={entry.value === "true" ? "check" : "close"}
           size={18}
         />
-      </Box>
+      </View>
     );
+    // Text
   } else if (tracker.type === "text" && entry.value) {
-    return <Icon color={green} name="short-text" />;
+    return (
+      <View style={[styles.valueBall, { backgroundColor: col(tracker.color) }]}>
+        <Icon color="white" name="short-text" />
+      </View>
+    );
   } else {
     return empty;
   }
 };
 
+/**
+ * Main table of tracker entries
+ */
+
 const TrackerTable = ({ date }) => {
   const { screenWidth } = useContext(UIContext);
 
-  const numberOfDays = Math.floor((screenWidth - 160) / 50);
+  const numberOfDays = Math.floor((screenWidth - 160) / CELL_SIZE);
   const navigation = useNavigation();
   const dates = prepareDates(numberOfDays, date);
-  const { trackers, getEntry, addEntry, editEntry } = useContext(DataContext);
+  const { trackers, getEntry, setEntry } = useContext(DataContext);
 
   return (
     <>
-      <Box
-        row
-        itemsCenter
-        style={
-          {
-            // backgroundColor: col("gray-1"),
-            // borderBottomColor: col("gray-3"),
-            // borderBottomWidth: StyleSheet.hairlineWidth,
-          }
-        }
-      >
-        <Box flex1 />
+      <View style={styles.days}>
         {dates.map(({ date }, i) => (
-          <Box
-            key={i}
-            itemsCenter
-            justifyCenter
-            w5
-            h5
-            style={{
-              backgroundColor: isToday(date) ? col("yellow-2") : col("white"),
-              borderBottomColor: isToday(date)
-                ? col("yellow-4")
-                : col("gray-3"),
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          >
-            <T
-              light
-              style={{
-                fontSize: rem(0.55),
-                textTransform: "uppercase",
-              }}
-            >
-              {format(date, "eee")}
-            </T>
-            <T sm>{format(date, "d")}</T>
-          </Box>
+          <View key={i} style={[styles.day, isToday(date) && styles.today]}>
+            <T style={styles.dayText}>{format(date, "eee")}</T>
+            <T style={styles.dateText}>{format(date, "d")}</T>
+          </View>
         ))}
-        <Box w1 />
-      </Box>
+      </View>
 
       {trackers.map((tracker) => (
-        <Box
-          key={tracker.id}
-          flex1
-          row
-          style={{
-            alignItems: "stretch",
-            borderBottomColor: col("gray-3"),
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        >
-          <Box flex1 row itemsCenter>
+        <View key={tracker.id} style={styles.trackerRow}>
+          <View style={styles.trackerLabelContainer}>
             <TouchableOpacity
-              style={styles.trackerLabel}
+              style={styles.trackerLabelButton}
               onPress={() => {
                 navigation.navigate("TrackerView", { trackerId: tracker.id });
               }}
             >
-              <Icon
-                name={trackerIcon(tracker.type)}
-                color={tracker.color}
-                size={20}
-              />
-              <Box w1 />
-              <T xs title>
-                {tracker.label}
-              </T>
+              <TrackerTitle sm tracker={tracker} />
             </TouchableOpacity>
-          </Box>
+          </View>
+
           {dates.map(({ date, dateKey }) => {
             const entry = getEntry({ trackerId: tracker.id, dateKey });
             return (
-              <Box
+              <TouchableOpacity
                 key={dateKey}
-                itemsCenter
-                justifyCenter
-                w5
-                style={{
-                  height: 60,
-                  backgroundColor: isToday(date)
-                    ? col("yellow-2")
-                    : col("white"),
+                style={[styles.entryContainer, isToday(date) && styles.today]}
+                onPress={() => {
+                  if (tracker.type === "boolean") {
+                    const entry = getEntry({ trackerId: tracker.id, dateKey });
+                    setEntry(
+                      tracker,
+                      dateKey,
+                      entry?.value === "true" ? "false" : "true"
+                    );
+                  } else {
+                    navigation.navigate("EnterSingle", {
+                      trackerId: tracker.id,
+                      dateKey,
+                    });
+                  }
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => {
-                    if (tracker.type === "boolean") {
-                      const entry = getEntry({
-                        trackerId: tracker.id,
-                        dateKey,
-                      });
-                      entry
-                        ? editEntry({
-                            ...entry,
-                            value: entry.value === "true" ? "false" : "true",
-                          })
-                        : addEntry({
-                            trackerId: tracker.id,
-                            dateKey,
-                            id: "",
-                            value: "true",
-                          });
-                    } else {
-                      navigation.navigate("EnterSingle", {
-                        trackerId: tracker.id,
-                        dateKey,
-                      });
-                    }
-                  }}
-                  style={styles.entry}
-                >
-                  {renderVal({ entry, tracker })}
-                </TouchableOpacity>
-              </Box>
+                {renderVal({ entry, tracker })}
+              </TouchableOpacity>
             );
           })}
-          <Box w1 />
-        </Box>
+        </View>
       ))}
     </>
   );

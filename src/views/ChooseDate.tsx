@@ -3,30 +3,46 @@ import isAfter from "date-fns/isAfter";
 import isBefore from "date-fns/isBefore";
 import isSameDay from "date-fns/isSameDay";
 import React, { useCallback, useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { col } from "../base/colors";
-import IconButton from "../base/IconButton";
 import LargeButton from "../base/LargeButton";
-import T, { H1, rem } from "../base/Text";
-import Box from "../layout/Box";
+import MonthShifter from "../base/MonthShifter";
+import { tw } from "../base/styles/tailwind";
+import T from "../base/Text";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+const WIDTH = 380;
+
+const styles = StyleSheet.create({
+  scroll: tw(`flex-1`),
+  container: tw(`flex-1 bg-white p-2 justify-between`),
+  days: tw(`flex-row`),
+  dayContainer: {
+    ...tw(`h-10 justify-center`),
+    width: WIDTH / 7,
+  },
+  day: tw(`text-gray-500 text-xs uppercase`),
+  calendar: tw(`items-center justify-center`),
+  calendarContainer: {
+    ...tw(`flex-row flex-wrap border border-gray-400 rounded-lg`),
+    width: WIDTH + StyleSheet.hairlineWidth * 2,
+  },
+  offset: tw(`border-r border-b border-gray-400`),
+  date: {
+    ...tw(`h-10 items-center justify-center border-gray-400`),
+    width: WIDTH / 7,
+  },
+  dateText: tw(`text-sm`),
+});
+
 const ChooseDate = ({ route, navigation }) => {
+  // current displayed month values
   const current = new Date(route.params.current);
   const [activeMonth, setActiveMonth] = useState(current);
-
   const month = activeMonth.getMonth();
   const year = activeMonth.getFullYear();
-
-  const previous = new Date(year, month - 1, 1);
-  const next = new Date(year, month + 1, 1);
-  const hasNext = !isAfter(next, new Date());
-
-  // const isCurrentMonth = isSameMonth(date, currentValue);
-  // const currentDay = currentValue.getDate();
 
   // check if any given date is disabled
   const isDisabled = useCallback((d: Date) => {
@@ -48,9 +64,10 @@ const ChooseDate = ({ route, navigation }) => {
     });
   }, [isDisabled, month, year]);
 
+  // calculate display values for the calendar
   const monthStartDay = days[0].date.getDay();
   const mondayFirst = (monthStartDay - 1) % 7;
-  const offset = mondayFirst * (280 / 7);
+  const offset = mondayFirst * (WIDTH / 7);
 
   const showRightBorder = useCallback((n) => (n + mondayFirst) % 7 !== 0, [
     mondayFirst,
@@ -63,75 +80,27 @@ const ChooseDate = ({ route, navigation }) => {
   );
 
   return (
-    <LayoutWithHeader title={<H1>View On Date</H1>} back="Home">
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <Box
-          h5
-          row
-          itemsCenter
-          justifyCenter
-          style={{
-            backgroundColor: col("gray-1"),
-            borderBottomColor: col("gray-3"),
-            borderBottomWidth: StyleSheet.hairlineWidth,
-          }}
-        >
-          <Box w5 itemsCenter>
-            <IconButton
-              name="keyboard-arrow-left"
-              color={col("gray-4")}
-              onPress={() => setActiveMonth(previous)}
-            />
-          </Box>
-          <T xs bold>
-            {format(activeMonth, "MMM yyyy")}
-          </T>
-          <Box w5 itemsCenter>
-            {hasNext && (
-              <IconButton
-                name="keyboard-arrow-right"
-                color={col("gray-4")}
-                onPress={() => setActiveMonth(next)}
-              />
-            )}
-          </Box>
-        </Box>
-        <Box flex1 bgWhite p2 justifyBetween>
-          <Box itemsCenter>
-            <Box row style={{ width: 280 }}>
+    <LayoutWithHeader title="View On Date" back="Home">
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <MonthShifter value={activeMonth} onChange={(d) => setActiveMonth(d)} />
+        <View style={styles.container}>
+          <View style={styles.calendar}>
+            <View style={styles.days}>
               {weekDays.map((day) => (
-                <Box key={day} h3 itemsCenter style={{ width: 280 / 7 }}>
-                  <T
-                    light
-                    style={{
-                      fontSize: rem(0.55),
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {day}
-                  </T>
-                </Box>
+                <View key={day} style={styles.dayContainer}>
+                  <T style={styles.day}>{day}</T>
+                </View>
               ))}
-            </Box>
-            <Box
-              row
-              wrap
-              style={{
-                width: 280 + StyleSheet.hairlineWidth * 2,
-                borderWidth: StyleSheet.hairlineWidth,
-                borderColor: col("gray-4"),
-                borderRadius: 4,
-              }}
-            >
+            </View>
+            <View style={styles.calendarContainer}>
               {offset !== 0 && (
-                <Box
-                  style={{
-                    width: offset,
-                    borderRightWidth: StyleSheet.hairlineWidth,
-                    borderRightColor: col("gray-4"),
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                    borderBottomColor: col("gray-4"),
-                  }}
+                <View
+                  style={[
+                    styles.offset,
+                    {
+                      width: offset,
+                    },
+                  ]}
                 />
               )}
               {days.map((d) => (
@@ -142,42 +111,33 @@ const ChooseDate = ({ route, navigation }) => {
                   }}
                   disabled={d.disabled}
                   style={[
-                    {
-                      width: 280 / 7,
-                      height: 40,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    },
-                    showRightBorder(d.day) && {
-                      borderRightWidth: StyleSheet.hairlineWidth,
-                      borderRightColor: col("gray-4"),
-                    },
-                    showBottomBorder(d.day) && {
-                      borderBottomWidth: StyleSheet.hairlineWidth,
-                      borderBottomColor: col("gray-4"),
-                    },
-                    d.disabled && {
-                      backgroundColor: col("gray-2"),
-                    },
-                    d.isCurrent && {
-                      backgroundColor: col("green-5"),
-                    },
+                    styles.date,
+                    showRightBorder(d.day) && tw(`border-r`),
+                    showBottomBorder(d.day) && tw(`border-b`),
+                    d.disabled && tw(`bg-gray-200`),
+                    d.isCurrent && tw(`bg-green-500`),
                   ]}
                 >
-                  <T sm white={d.isCurrent} light={d.disabled}>
+                  <T
+                    style={[
+                      styles.dateText,
+                      d.isCurrent && tw(`text-white`),
+                      d.disabled && tw(`text-gray-500`),
+                    ]}
+                  >
                     {d.day}
                   </T>
                 </TouchableOpacity>
               ))}
-            </Box>
-          </Box>
+            </View>
+          </View>
           <LargeButton
             onPress={() => {
               navigation.navigate("Home", { date: new Date().toISOString() });
             }}
             title="Jump to Today"
           />
-        </Box>
+        </View>
       </ScrollView>
     </LayoutWithHeader>
   );

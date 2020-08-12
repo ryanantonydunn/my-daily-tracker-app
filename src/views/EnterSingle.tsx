@@ -1,19 +1,22 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { col } from "../base/colors";
 import DayShifter from "../base/DayShifter";
-import IconButton from "../base/IconButton";
-import T, { H1 } from "../base/Text";
-import Box from "../layout/Box";
+import { tw } from "../base/styles/tailwind";
+import TrackerTitle from "../base/TrackerTitle";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
 import DataContext from "../store/DataContext";
 import { getDateFromKey, getDateKey } from "../utils/getDateKey";
 import { getTrackerComponent } from "./forms/FormField";
 
+const styles = StyleSheet.create({
+  scroll: tw(`flex-1`),
+  entryForm: tw(`flex-1 items-center justify-center bg-white`),
+});
+
 const EnterSingle = ({ route, navigation }) => {
   const { trackerId, dateKey: paramDateKey } = route.params;
-  const { getTracker, addEntry, editEntry, getEntry } = useContext(DataContext);
+  const { getTracker, setEntry, getEntry } = useContext(DataContext);
   const [date, setDate] = useState(getDateFromKey(paramDateKey));
   const dateKey = getDateKey(date);
   const tracker = getTracker(trackerId);
@@ -25,38 +28,22 @@ const EnterSingle = ({ route, navigation }) => {
   const hasKeyboard = ["number", "text"].includes(tracker.type);
 
   return (
-    <LayoutWithHeader
-      hasKeyboard={hasKeyboard}
-      title={<H1>Make Entry</H1>}
-      back="Home"
-    >
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
+    <LayoutWithHeader hasKeyboard={hasKeyboard} title="Make Entry" back="Home">
+      <ScrollView contentContainerStyle={styles.scroll}>
         <DayShifter value={date} onChange={setDate} page="EnterSingle" />
-        <Box
-          flex1
-          itemsCenter
-          justifyCenter
-          style={{ backgroundColor: "white" }}
-        >
+        <View style={styles.entryForm}>
           {!!tracker && (
             <FormFieldComponent
-              title={tracker.label}
+              title={<TrackerTitle tracker={tracker} style={tw(`mb-4`)} />}
               highlight={tracker.color}
               value={value}
               onSave={(value) => {
-                entry
-                  ? editEntry({ ...entry, value })
-                  : addEntry({
-                      trackerId: tracker.id,
-                      dateKey,
-                      id: "",
-                      value,
-                    });
+                setEntry(tracker, dateKey, value);
                 navigation.navigate("Home");
               }}
             />
           )}
-        </Box>
+        </View>
       </ScrollView>
     </LayoutWithHeader>
   );

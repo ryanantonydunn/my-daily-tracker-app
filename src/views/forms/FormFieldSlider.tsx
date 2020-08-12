@@ -1,12 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ConfirmButton } from "../../base/IconButton";
+import { StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from "../../base/Icon";
 import Slider from "../../base/Slider";
-import T from "../../base/Text";
-import Box from "../../layout/Box";
+import { tw } from "../../base/styles/tailwind";
+import FormContainer from "../../layout/FormContainer";
 import UIContext from "../../store/UIContext";
 import { FormFieldProps } from "./FormField";
-import { trackerIcon } from "../../utils/trackerTypes";
-import Icon from "../../base/Icon";
+
+const styles = StyleSheet.create({
+  button: tw(`
+    w-20 h-20 items-center justify-center
+    bg-white border border-gray-300 rounded-full
+    mr-2 ml-2 mt-4
+  `),
+});
 
 const FormFieldSlider = ({
   title,
@@ -20,27 +28,17 @@ const FormFieldSlider = ({
   useEffect(() => setTempValue(value), [value]);
 
   return (
-    <Box itemsCenter justifyCenter style={{ height }}>
-      <Box row>
-        <Icon name={trackerIcon("slider")} color={highlight} />
-        <Box w1 />
-        <T lg title>
-          {title}
-        </T>
-      </Box>
-      <Box h2 />
+    <FormContainer fixedHeight>
+      {title}
       <Slider
         onChange={(str) => setTempValue(str)}
         value={tempValue}
         highlight={highlight}
       />
-      <Box h2 />
-      <ConfirmButton
-        disabled={tempValue === ""}
-        onPress={() => onSave(tempValue)}
-      />
-      <Box h4 />
-    </Box>
+      <TouchableOpacity style={styles.button} onPress={() => onSave(tempValue)}>
+        <Icon color="green-500" name="check" size={32} />
+      </TouchableOpacity>
+    </FormContainer>
   );
 };
 

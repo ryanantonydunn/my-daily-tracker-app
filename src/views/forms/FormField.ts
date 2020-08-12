@@ -1,11 +1,12 @@
-import { Tracker, TrackerType } from "../../store/DataContext";
+import { ReactNode } from "react";
+import { TrackerType } from "../../store/DataContext";
 import FormFieldBoolean from "./FormFieldBoolean";
 import FormFieldNumber from "./FormFieldNumber";
 import FormFieldSlider from "./FormFieldSlider";
 import FormFieldText from "./FormFieldText";
 
 export interface FormFieldProps {
-  title: string;
+  title: ReactNode;
   highlight?: string;
   value: any;
   onSave: Function;

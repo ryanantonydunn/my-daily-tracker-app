@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
-import T, { H1 } from "../base/Text";
-import Box from "../layout/Box";
-import LayoutWithHeader from "../layout/LayoutWithHeader";
 import { ScrollView } from "react-native-gesture-handler";
+import T from "../base/Text";
+import LayoutWithHeader from "../layout/LayoutWithHeader";
 import DataContext from "../store/DataContext";
 
 const TrackerView = ({ route, navigation }) => {
@@ -13,21 +12,11 @@ const TrackerView = ({ route, navigation }) => {
   const title = tracker?.label || "Unknown Tracker";
 
   return (
-    <LayoutWithHeader
-      back
-      title={<H1>{title}</H1>}
-      menu={[
-        {
-          onPress: () => navigation.navigate("EditTracker", { trackerId }),
-          children: "Edit Tracker",
-        },
-      ]}
-    >
+    <LayoutWithHeader title={title} back="Home">
       {!!tracker && (
-        <Box component={ScrollView} p1>
+        <ScrollView>
           <T>{trackerId}</T>
-          <Box h2 />
-        </Box>
+        </ScrollView>
       )}
     </LayoutWithHeader>
   );

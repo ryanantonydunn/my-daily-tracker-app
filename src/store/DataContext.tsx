@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getDateKey } from "../utils/getDateKey";
 import sub from "date-fns/sub";
-import { green, blue_500, col } from "../base/colors";
 
 export type TrackerType = "slider" | "number" | "text" | "boolean";
 
@@ -38,6 +37,7 @@ interface DataContext {
   getEntry: Function;
   addEntry: Function;
   editEntry: Function;
+  setEntry: Function;
 }
 
 const newId = () => `local-${String(Math.random()).slice(2)}`;
@@ -47,7 +47,7 @@ export const emptyTracker = (): Tracker => ({
   type: "boolean",
   label: "",
   streak: 0,
-  color: green,
+  color: "green-500",
 });
 
 export const emptySlider = (): SliderValues => ({
@@ -62,28 +62,28 @@ const startTrackers: Tracker[] = [
     type: "slider",
     label: "Happy",
     streak: 0,
-    color: col("green-5"),
+    color: "green-500",
   },
   {
     id: "126",
-    type: "slider",
+    type: "text",
     label: "Anxious",
     streak: 0,
-    color: col("red-5"),
+    color: "red-500",
   },
   {
     id: "124",
     type: "boolean",
     label: "Meditation",
     streak: 0,
-    color: col("yellow-6"),
+    color: "yellow-600",
   },
   {
     id: "125",
     type: "number",
     label: "Run (km)",
     streak: 0,
-    color: col("teal-5"),
+    color: "teal-500",
   },
 ];
 
@@ -126,6 +126,20 @@ export const DataProvider = ({ children }) => {
     );
   };
 
+  const setEntry = (tracker, dateKey, value) => {
+    const entry = getEntry({ trackerId: tracker.id, dateKey });
+    if (entry) {
+      editEntry({ ...entry, value });
+    } else {
+      addEntry({
+        trackerId: tracker.id,
+        dateKey,
+        id: "",
+        value,
+      });
+    }
+  };
+
   // set streaks
   // TODO change to something way more efficient
   useEffect(() => {
@@ -159,6 +173,7 @@ export const DataProvider = ({ children }) => {
         getEntry,
         addEntry,
         editEntry,
+        setEntry,
       }}
     >
       {children}

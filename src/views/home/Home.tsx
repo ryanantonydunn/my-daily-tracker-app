@@ -1,41 +1,27 @@
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { col, gray_900, white } from "../../base/colors";
 import DayShifter from "../../base/DayShifter";
+import Gradient from "../../base/Gradient";
 import Icon from "../../base/Icon";
-import IconButton from "../../base/IconButton";
 import Logo from "../../base/Logo";
+import { tw } from "../../base/styles/tailwind";
 import T from "../../base/Text";
-import Box from "../../layout/Box";
 import LayoutWithHeader from "../../layout/LayoutWithHeader";
 import TrackerTable from "./TrackerTable";
 
 const styles = StyleSheet.create({
-  button: {
-    elevation: 4,
-    shadowColor: gray_900,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 5,
-    shadowOpacity: 0.1,
-    margin: 10,
-  },
-  buttonLeft: {
-    position: "absolute",
-    padding: 10,
-    bottom: 0,
-    left: 0,
-  },
-  buttonRight: {
-    position: "absolute",
-    bottom: 15,
-    right: 15,
-  },
-  buttonPaddingOnTable: {
-    height: 100,
-  },
+  container: tw(`flex-1 bg-white pb-32`),
+  newTracker: tw(`flex-row items-center justify-center p-8`),
+  newTrackerText: tw(`ml-2 text-sm text-center`),
+  buttonContainer: tw(`bg-white`),
+  buttonInner: tw(`absolute right-0 bottom-0 m-8`),
+  button: tw(`
+    w-20 h-20 items-center justify-center
+    border-2 border-white
+    rounded-full overflow-hidden
+  `),
 });
 
 const Home = ({ route, navigation }) => {
@@ -44,70 +30,39 @@ const Home = ({ route, navigation }) => {
 
   return (
     <LayoutWithHeader
-      title={<Logo />}
+      logo
       menu={[
         {
-          onPress: () => navigation.navigate("Sandbox"),
-          children: "Sandbox",
+          onPress: setDate,
+          children: "View on date",
         },
       ]}
     >
-      <Box flex1 bgWhite component={ScrollView}>
+      <ScrollView style={styles.container}>
         <DayShifter value={date} onChange={setDate} page="Home" />
         <TrackerTable date={date} />
-        <Box h1 />
-        <Box>
+        <View>
           <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 20,
-            }}
+            style={styles.newTracker}
+            onPress={() => navigation.navigate("AddTracker")}
           >
-            <Icon name="playlist-add" color={col("green-5")} />
-            <Box w1 />
-            <T sm center>
-              New tracker
-            </T>
+            <Icon name="playlist-add" color="green-500" />
+            <T style={styles.newTrackerText}>New tracker</T>
           </TouchableOpacity>
-        </Box>
-        <Box h4 />
-      </Box>
+        </View>
+      </ScrollView>
 
-      <Box bgWhite component={SafeAreaView}>
-        <Box flex1 bgWhite>
-          <View style={styles.buttonRight}>
-            <TouchableOpacity
-              style={{
-                width: 60,
-                height: 60,
-                alignItems: "center",
-                justifyContent: "center",
-                borderWidth: 2,
-                borderColor: col("white"),
-                borderRadius: 30,
-                overflow: "hidden",
-              }}
-              onPress={() => navigation.navigate("EnterAll")}
-            >
-              <LinearGradient
-                colors={[col("green-5"), col("teal-5")]}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 1 }}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-              />
-              <Icon color={white} name="add" size={32} />
-            </TouchableOpacity>
-          </View>
-        </Box>
-      </Box>
+      <SafeAreaView style={styles.buttonContainer}>
+        <View style={styles.buttonInner}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("EnterAll")}
+          >
+            <Gradient col1="green-500" col2="teal-500" />
+            <Icon color="white" name="add" size={32} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </LayoutWithHeader>
   );
 };

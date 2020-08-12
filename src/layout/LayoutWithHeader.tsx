@@ -12,10 +12,13 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Dropdown, { DropdownItem } from "../base/Dropdown";
 import Gradient from "../base/Gradient";
 import Icon from "../base/Icon";
+import Logo from "../base/Logo";
 import { tw } from "../base/styles/tailwind";
+import T from "../base/Text";
 
 interface LayoutWithHeaderProps {
-  title: ReactNode;
+  title?: string;
+  logo?: boolean;
   back?: string | true;
   menu?: DropdownItem[];
   children: ReactNode;
@@ -27,10 +30,12 @@ const styles = StyleSheet.create({
   header: tw(`flex-row items-center justify-between h-12`),
   cell: tw(`w-12 items-center`),
   iconButton: tw(`p-2`),
+  title: tw(`text-lg text-white`),
 });
 
 const LayoutWithHeader = ({
   title,
+  logo,
   back,
   menu,
   children,
@@ -77,7 +82,8 @@ const LayoutWithHeader = ({
               </TouchableOpacity>
             )}
           </View>
-          {title}
+          {title && <T style={styles.title}>{title}</T>}
+          {logo && <Logo />}
           <View style={styles.cell}>
             {menu?.length && (
               <TouchableOpacity

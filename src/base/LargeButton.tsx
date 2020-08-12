@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Gradient from "./Gradient";
 import { tw } from "./styles/tailwind";
@@ -14,11 +14,15 @@ interface LargeButtonProps {
   onPress: Function;
   secondary?: boolean;
   title: string;
+  style?: StyleProp<ViewStyle>;
 }
 
-const LargeButton = ({ onPress, title }: LargeButtonProps) => {
+const LargeButton = ({ onPress, title, style }: LargeButtonProps) => {
   return (
-    <TouchableOpacity onPress={() => onPress()} style={styles.container}>
+    <TouchableOpacity
+      onPress={() => onPress()}
+      style={[styles.container, style]}
+    >
       <Gradient col1="green-500" col2="teal-500" />
       <T style={styles.text}>{title}</T>
     </TouchableOpacity>

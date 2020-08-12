@@ -1,45 +1,33 @@
-import React, { useContext } from "react";
-import Box from "../../layout/Box";
-import IconButton, { ConfirmButton } from "../../base/IconButton";
-import { col, red } from "../../base/colors";
-import T from "../../base/Text";
-import { FormFieldProps } from "./FormField";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "../../base/Icon";
-import { trackerIcon } from "../../utils/trackerTypes";
-import UIContext from "../../store/UIContext";
+import { tw } from "../../base/styles/tailwind";
+import FormContainer from "../../layout/FormContainer";
+import { FormFieldProps } from "./FormField";
 
-const FormFieldBoolean = ({
-  title,
-  highlight,
-  value,
-  onSave,
-}: FormFieldProps) => {
-  const { safeHeight } = useContext(UIContext);
-  const height = safeHeight - 88;
+const styles = StyleSheet.create({
+  buttons: tw(`flex-row mb-8`),
+  button: tw(`
+    w-20 h-20 items-center justify-center
+    bg-white border border-gray-300 rounded-full
+    mr-2 ml-2
+  `),
+});
 
+const FormFieldBoolean = ({ title, value, onSave }: FormFieldProps) => {
   return (
-    <Box itemsCenter justifyCenter style={{ height }}>
-      <Box row>
-        <Icon name={trackerIcon("boolean")} color={highlight} />
-        <Box w1 />
-        <T lg title>
-          {title}
-        </T>
-      </Box>
-      <Box h2 />
-      <Box row>
-        <IconButton
-          lg
-          border={col("gray-4")}
-          color={red}
-          name="close"
-          onPress={() => onSave("false")}
-        />
-        <Box w2 />
-        <ConfirmButton onPress={() => onSave("true")} />
-      </Box>
-      <Box h4 />
-    </Box>
+    <FormContainer fixedHeight>
+      {title}
+      <View style={styles.buttons}>
+        <TouchableOpacity style={styles.button} onPress={() => onSave("false")}>
+          <Icon color="red-500" name="add" size={32} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => onSave("true")}>
+          <Icon color="green-500" name="add" size={32} />
+        </TouchableOpacity>
+      </View>
+    </FormContainer>
   );
 };
 
