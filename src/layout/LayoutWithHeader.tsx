@@ -45,23 +45,11 @@ const LayoutWithHeader = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const showDropdown = menu?.length && menuOpen;
 
-  const Wrapper = useCallback(
-    ({ children }) =>
-      hasKeyboard ? (
-        <KeyboardAvoidingView
-          style={styles.wrapper}
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          {children}
-        </KeyboardAvoidingView>
-      ) : (
-        children
-      ),
-    [hasKeyboard]
-  );
-
   return (
-    <Wrapper>
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+    >
       <StatusBar animated barStyle="light-content" />
       <SafeAreaView>
         <Gradient col1="green-500" col2="teal-500" />
@@ -104,7 +92,7 @@ const LayoutWithHeader = ({
         items={menu}
         onClose={() => setMenuOpen(false)}
       />
-    </Wrapper>
+    </KeyboardAvoidingView>
   );
 };
 

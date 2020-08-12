@@ -5,8 +5,6 @@ import { FontProvider } from "./src/base/Text";
 import Router from "./src/layout/Router";
 import { DataProvider } from "./src/store/DataContext";
 import { UIProvider } from "./src/store/UIContext";
-import TestLayout from "./TestLayout";
-import { KeyboardAvoidingView } from "react-native";
 
 export default function App() {
   return (
