@@ -3,6 +3,7 @@ import isAfter from "date-fns/isAfter";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import SafeView from "../layout/SafeView";
 import Icon from "./Icon";
 import { tw } from "./styles/tailwind";
 import T from "./Text";
@@ -38,7 +39,7 @@ const MonthShifter = ({
   const hasNext = !isAfter(next, max);
 
   return (
-    <View style={styles.container}>
+    <SafeView left right style={styles.container}>
       <View style={styles.dateContainer}>
         <View style={styles.cell}>
           <TouchableOpacity
@@ -62,7 +63,7 @@ const MonthShifter = ({
           )}
         </View>
       </View>
-    </View>
+    </SafeView>
   );
 };
 

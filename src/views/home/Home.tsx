@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import DayShifter from "../../base/DayShifter";
 import Gradient from "../../base/Gradient";
 import Icon from "../../base/Icon";
 import { tw } from "../../base/styles/tailwind";
 import T from "../../base/Text";
 import LayoutWithHeader from "../../layout/LayoutWithHeader";
+import SafeView from "../../layout/SafeView";
 import TrackerTable from "./TrackerTable";
 
 const styles = StyleSheet.create({
@@ -38,33 +38,32 @@ const Home = ({ route, navigation }) => {
         },
       ]}
     >
-      <SafeAreaView style={styles.safeView}>
-        <ScrollView style={styles.container}>
-          <DayShifter value={date} onChange={setDate} page="Home" />
-          <TrackerTable date={date} />
-          <View>
-            <TouchableOpacity
-              style={styles.newTracker}
-              onPress={() => navigation.navigate("AddTracker")}
-            >
-              <Icon name="playlist-add" color="green-500" />
-              <T style={styles.newTrackerText}>New tracker</T>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
-        <View style={styles.buttonContainer}>
-          <View style={styles.buttonPosition}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate("EnterAll")}
-            >
-              <Gradient col1="green-500" col2="teal-500" />
-              <Icon color="white" name="add" size={32} />
-            </TouchableOpacity>
-          </View>
+      <ScrollView style={styles.container}>
+        <DayShifter value={date} onChange={setDate} page="Home" />
+        <TrackerTable date={date} />
+        <View>
+          <TouchableOpacity
+            style={styles.newTracker}
+            onPress={() => navigation.navigate("AddTracker")}
+          >
+            <Icon name="playlist-add" color="green-500" />
+            <T style={styles.newTrackerText}>New tracker</T>
+          </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </ScrollView>
+
+      <View style={styles.buttonContainer}>
+        <View style={styles.buttonPosition}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("EnterAll")}
+          >
+            <Gradient col1="green-500" col2="teal-500" />
+            <Icon color="white" name="add" size={32} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <SafeView bottom />
     </LayoutWithHeader>
   );
 };

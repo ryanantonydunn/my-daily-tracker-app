@@ -1,9 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   View,
@@ -15,6 +14,7 @@ import Icon from "../base/Icon";
 import Logo from "../base/Logo";
 import { tw } from "../base/styles/tailwind";
 import T from "../base/Text";
+import SafeView from "./SafeView";
 
 interface LayoutWithHeaderProps {
   title?: string;
@@ -46,12 +46,9 @@ const LayoutWithHeader = ({
   const showDropdown = menu?.length && menuOpen;
 
   return (
-    <KeyboardAvoidingView
-      style={styles.wrapper}
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-    >
+    <>
       <StatusBar animated barStyle="light-content" />
-      <SafeAreaView>
+      <SafeView top left right>
         <Gradient col1="green-500" col2="teal-500" />
         <View style={styles.header}>
           <View style={styles.cell}>
@@ -83,8 +80,13 @@ const LayoutWithHeader = ({
             )}
           </View>
         </View>
-      </SafeAreaView>
-      {children}
+      </SafeView>
+      <KeyboardAvoidingView
+        style={styles.wrapper}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
+        {children}
+      </KeyboardAvoidingView>
       <Dropdown
         open={showDropdown}
         top={44}
@@ -92,7 +94,7 @@ const LayoutWithHeader = ({
         items={menu}
         onClose={() => setMenuOpen(false)}
       />
-    </KeyboardAvoidingView>
+    </>
   );
 };
 

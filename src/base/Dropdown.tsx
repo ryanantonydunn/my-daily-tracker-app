@@ -7,9 +7,9 @@ import React, {
 } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import SafeView from "../layout/SafeView";
 import UIContext from "../store/UIContext";
-import { col, tw } from "./styles/tailwind";
+import { tw } from "./styles/tailwind";
 import T from "./Text";
 
 export interface DropdownItem {
@@ -71,44 +71,42 @@ const Dropdown = ({ open, onClose, items, ...position }: DropdownProps) => {
 
   return (
     <>
-      <View style={[styles.fillScreen, fillStyle]}>
-        <SafeAreaView>
-          <View style={styles.fill}>
-            <Animated.View
-              style={[
-                styles.dropdown,
-                {
-                  ...position,
-                  opacity: opacity.current,
-                  transform: [{ translateY: y.current }],
-                },
-              ]}
-            >
-              {items.map(({ children, onPress }, i) =>
-                onPress ? (
-                  <TouchableOpacity
-                    key={i}
-                    style={styles.dropdownItem}
-                    onPress={() => {
-                      onClose();
-                      onPress();
-                    }}
-                  >
-                    {renderChildren(children)}
-                  </TouchableOpacity>
-                ) : (
-                  <View key={i} style={styles.dropdownItem}>
-                    {renderChildren(children)}
-                  </View>
-                )
-              )}
-            </Animated.View>
-            <View style={[styles.fillScreen, fillStyle]}>
-              <TouchableOpacity style={fillStyle} onPress={() => onClose()} />
-            </View>
+      <SafeView top left right bottom style={[styles.fillScreen, fillStyle]}>
+        <View style={styles.fill}>
+          <Animated.View
+            style={[
+              styles.dropdown,
+              {
+                ...position,
+                opacity: opacity.current,
+                transform: [{ translateY: y.current }],
+              },
+            ]}
+          >
+            {items.map(({ children, onPress }, i) =>
+              onPress ? (
+                <TouchableOpacity
+                  key={i}
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    onClose();
+                    onPress();
+                  }}
+                >
+                  {renderChildren(children)}
+                </TouchableOpacity>
+              ) : (
+                <View key={i} style={styles.dropdownItem}>
+                  {renderChildren(children)}
+                </View>
+              )
+            )}
+          </Animated.View>
+          <View style={[styles.fillScreen, fillStyle]}>
+            <TouchableOpacity style={fillStyle} onPress={() => onClose()} />
           </View>
-        </SafeAreaView>
-      </View>
+        </View>
+      </SafeView>
     </>
   );
 };

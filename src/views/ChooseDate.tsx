@@ -5,28 +5,27 @@ import isSameDay from "date-fns/isSameDay";
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import LargeButton from "../base/LargeButton";
 import MonthShifter from "../base/MonthShifter";
 import { tw } from "../base/styles/tailwind";
 import T from "../base/Text";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
+import SafeView from "../layout/SafeView";
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const WIDTH = 300;
 
 const styles = StyleSheet.create({
-  safeView: tw(`flex-1 pt-0`),
-  flex1: tw(`flex-1`),
-  container: tw(`flex-1 bg-white p-2 justify-between`),
+  scroll: tw(`flex-grow`),
+  container: tw(`flex-1 bg-white justify-between`),
   days: tw(`flex-row`),
   dayContainer: {
     ...tw(`h-10 justify-center`),
     width: WIDTH / 7,
   },
   day: tw(`text-gray-500 text-xs uppercase`),
-  calendar: tw(`items-center justify-center mb-6`),
+  calendar: tw(`items-center justify-center mb-6 mt-4`),
   calendarContainer: {
     ...tw(`flex-row flex-wrap border border-gray-400 rounded-lg`),
     width: WIDTH + StyleSheet.hairlineWidth * 2,
@@ -83,62 +82,59 @@ const ChooseDate = ({ route, navigation }) => {
 
   return (
     <LayoutWithHeader title="View On Date" back="Home">
-      <SafeAreaView style={styles.safeView}>
-        <ScrollView style={styles.flex1}>
-          <MonthShifter
-            value={activeMonth}
-            onChange={(d) => setActiveMonth(d)}
-          />
-          <View style={styles.container}>
-            <View style={styles.calendar}>
-              <View style={styles.days}>
-                {weekDays.map((day) => (
-                  <View key={day} style={styles.dayContainer}>
-                    <T style={styles.day}>{day}</T>
-                  </View>
-                ))}
-              </View>
-              <View style={styles.calendarContainer}>
-                {offset !== 0 && (
-                  <View
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <MonthShifter value={activeMonth} onChange={setActiveMonth} />
+        <SafeView left right style={styles.container}>
+          <View style={styles.calendar}>
+            <View style={styles.days}>
+              {weekDays.map((day) => (
+                <View key={day} style={styles.dayContainer}>
+                  <T style={styles.day}>{day}</T>
+                </View>
+              ))}
+            </View>
+            <View style={styles.calendarContainer}>
+              {offset !== 0 && (
+                <View
+                  style={[
+                    styles.offset,
+                    {
+                      width: offset,
+                    },
+                  ]}
+                />
+              )}
+              {days.map((d) => (
+                <TouchableOpacity
+                  key={d.label}
+                  onPress={() => {
+                    navigation.navigate("Home", {
+                      date: d.date.toISOString(),
+                    });
+                  }}
+                  disabled={d.disabled}
+                  style={[
+                    styles.date,
+                    showRightBorder(d.day) && tw(`border-r`),
+                    showBottomBorder(d.day) && tw(`border-b`),
+                    d.disabled && tw(`bg-gray-200`),
+                    d.isCurrent && tw(`bg-green-500`),
+                  ]}
+                >
+                  <T
                     style={[
-                      styles.offset,
-                      {
-                        width: offset,
-                      },
-                    ]}
-                  />
-                )}
-                {days.map((d) => (
-                  <TouchableOpacity
-                    key={d.label}
-                    onPress={() => {
-                      navigation.navigate("Home", {
-                        date: d.date.toISOString(),
-                      });
-                    }}
-                    disabled={d.disabled}
-                    style={[
-                      styles.date,
-                      showRightBorder(d.day) && tw(`border-r`),
-                      showBottomBorder(d.day) && tw(`border-b`),
-                      d.disabled && tw(`bg-gray-200`),
-                      d.isCurrent && tw(`bg-green-500`),
+                      styles.dateText,
+                      d.isCurrent && tw(`text-white`),
+                      d.disabled && tw(`text-gray-500`),
                     ]}
                   >
-                    <T
-                      style={[
-                        styles.dateText,
-                        d.isCurrent && tw(`text-white`),
-                        d.disabled && tw(`text-gray-500`),
-                      ]}
-                    >
-                      {d.day}
-                    </T>
-                  </TouchableOpacity>
-                ))}
-              </View>
+                    {d.day}
+                  </T>
+                </TouchableOpacity>
+              ))}
             </View>
+          </View>
+          <View style={tw(`p-2`)}>
             <LargeButton
               onPress={() => {
                 navigation.navigate("Home", {
@@ -148,8 +144,9 @@ const ChooseDate = ({ route, navigation }) => {
               title="Jump to Today"
             />
           </View>
-        </ScrollView>
-      </SafeAreaView>
+        </SafeView>
+      </ScrollView>
+      <SafeView bottom />
     </LayoutWithHeader>
   );
 };

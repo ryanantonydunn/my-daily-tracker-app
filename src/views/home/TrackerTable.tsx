@@ -8,6 +8,7 @@ import Icon from "../../base/Icon";
 import { col, tw } from "../../base/styles/tailwind";
 import T from "../../base/Text";
 import TrackerTitle from "../../base/TrackerTitle";
+import SafeView from "../../layout/SafeView";
 import DataContext from "../../store/DataContext";
 import UIContext from "../../store/UIContext";
 import { getDateKey } from "../../utils/getDateKey";
@@ -120,17 +121,17 @@ const TrackerTable = ({ date }) => {
 
   return (
     <>
-      <View style={styles.days}>
+      <SafeView left right style={styles.days}>
         {dates.map(({ date }, i) => (
           <View key={i} style={[styles.day, isToday(date) && styles.today]}>
             <T style={styles.dayText}>{format(date, "eee")}</T>
             <T style={styles.dateText}>{format(date, "d")}</T>
           </View>
         ))}
-      </View>
+      </SafeView>
 
       {trackers.map((tracker) => (
-        <View key={tracker.id} style={styles.trackerRow}>
+        <SafeView left right key={tracker.id} style={styles.trackerRow}>
           <View style={styles.trackerLabelContainer}>
             <TouchableOpacity
               style={styles.trackerLabelButton}
@@ -168,7 +169,7 @@ const TrackerTable = ({ date }) => {
               </TouchableOpacity>
             );
           })}
-        </View>
+        </SafeView>
       ))}
     </>
   );

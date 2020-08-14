@@ -1,18 +1,18 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import DayShifter from "../base/DayShifter";
 import { tw } from "../base/styles/tailwind";
 import TrackerTitle from "../base/TrackerTitle";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
+import SafeView from "../layout/SafeView";
 import DataContext from "../store/DataContext";
 import { getDateFromKey, getDateKey } from "../utils/getDateKey";
 import { getTrackerComponent } from "./forms/FormField";
 
 const styles = StyleSheet.create({
   safeView: tw(`flex-1 pt-0`),
-  scroll: tw(`flex-1`),
+  scroll: tw(`flex-grow`),
   entryForm: tw(`flex-1 items-center justify-center bg-white`),
 });
 
@@ -31,24 +31,23 @@ const EnterSingle = ({ route, navigation }) => {
 
   return (
     <LayoutWithHeader hasKeyboard={hasKeyboard} title="Make Entry" back="Home">
-      <SafeAreaView style={[styles.safeView, hasKeyboard && tw(`pb-0`)]}>
-        <ScrollView contentContainerStyle={styles.scroll}>
-          <DayShifter value={date} onChange={setDate} page="EnterSingle" />
-          <View style={styles.entryForm}>
-            {!!tracker && (
-              <FormFieldComponent
-                title={<TrackerTitle tracker={tracker} style={tw(`mb-4`)} />}
-                highlight={tracker.color}
-                value={value}
-                onSave={(value) => {
-                  setEntry(tracker, dateKey, value);
-                  navigation.navigate("Home");
-                }}
-              />
-            )}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <DayShifter value={date} onChange={setDate} page="EnterSingle" />
+        <SafeView left right style={styles.entryForm}>
+          {!!tracker && (
+            <FormFieldComponent
+              title={<TrackerTitle tracker={tracker} style={tw(`mb-4`)} />}
+              highlight={tracker.color}
+              value={value}
+              onSave={(value) => {
+                setEntry(tracker, dateKey, value);
+                navigation.navigate("Home");
+              }}
+            />
+          )}
+        </SafeView>
+        {!hasKeyboard && <SafeView bottom />}
+      </ScrollView>
     </LayoutWithHeader>
   );
 };
