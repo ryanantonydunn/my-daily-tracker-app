@@ -44,10 +44,10 @@ const Home = ({ route, navigation }) => {
         <View>
           <TouchableOpacity
             style={styles.newTracker}
-            onPress={() => navigation.navigate("AddTracker")}
+            onPress={() => navigation.navigate("EditTrackers")}
           >
             <Icon name="playlist-add" color="green-500" />
-            <T style={styles.newTrackerText}>New tracker</T>
+            <T style={styles.newTrackerText}>Edit trackers</T>
           </TouchableOpacity>
         </View>
       </ScrollView>

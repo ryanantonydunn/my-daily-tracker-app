@@ -4,19 +4,18 @@ import sub from "date-fns/sub";
 
 export type TrackerType = "slider" | "number" | "text" | "boolean";
 
-export interface SliderValues {
-  min: string;
-  max: string;
-  step: string;
+export interface TrackerGroup {
+  id: string;
+  label: string;
 }
 
 export interface Tracker {
   id: string;
   label: string;
   type: TrackerType;
-  streak: number;
-  slider?: SliderValues;
   color: string;
+  disabled: boolean;
+  group: string;
 }
 
 export interface Entry {
@@ -27,11 +26,13 @@ export interface Entry {
 }
 
 interface DataContext {
+  groups: TrackerGroup[];
   trackers: Tracker[];
   entries: Entry[];
   getTracker: Function;
   addTracker: Function;
   editTracker: Function;
+  setTracker: Function;
   deleteTracker: Function;
   setTrackerOrder: Function;
   getEntry: Function;
@@ -42,48 +43,62 @@ interface DataContext {
 
 const newId = () => `local-${String(Math.random()).slice(2)}`;
 
-export const emptyTracker = (): Tracker => ({
+export const newTracker = (): Tracker => ({
   id: newId(),
   type: "boolean",
   label: "",
-  streak: 0,
   color: "green-500",
+  disabled: true,
+  group: "custom",
 });
 
-export const emptySlider = (): SliderValues => ({
-  min: "0",
-  max: "10",
-  step: "1",
-});
+const startGroups: TrackerGroup[] = [
+  {
+    id: "mood",
+    label: "Mood",
+  },
+  {
+    id: "activities",
+    label: "Activities",
+  },
+  {
+    id: "custom",
+    label: "Custom",
+  },
+];
 
 const startTrackers: Tracker[] = [
   {
-    id: "123",
+    id: "mood-happy",
     type: "slider",
     label: "Happy",
-    streak: 0,
     color: "green-500",
+    disabled: true,
+    group: "mood",
   },
   {
-    id: "126",
+    id: "mood-anxious",
     type: "text",
     label: "Anxious",
-    streak: 0,
     color: "red-500",
+    disabled: true,
+    group: "mood",
   },
   {
     id: "124",
     type: "boolean",
     label: "Meditation",
-    streak: 0,
     color: "yellow-600",
+    disabled: true,
+    group: "activities",
   },
   {
     id: "125",
     type: "number",
     label: "Run (km)",
-    streak: 0,
     color: "teal-500",
+    disabled: true,
+    group: "activities",
   },
 ];
 
@@ -92,6 +107,7 @@ const DataContext = React.createContext<Partial<DataContext>>({
 });
 
 export const DataProvider = ({ children }) => {
+  const [groups, setGroups] = useState<TrackerGroup[]>(startGroups);
   const [trackers, setTrackers] = useState<Tracker[]>(startTrackers);
   const [entries, setEntries] = useState<Entry[]>([]);
 
@@ -103,6 +119,15 @@ export const DataProvider = ({ children }) => {
     setTrackers((arr) =>
       arr.map((d) => (d.id === tracker.id ? { ...d, ...tracker } : d))
     );
+
+  const setTracker = (tracker) => {
+    const check = getTracker(tracker.id);
+    if (check) {
+      editTracker(tracker);
+    } else {
+      addTracker(tracker);
+    }
+  };
 
   const deleteTracker = (trackerId) =>
     setTrackers((arr) => arr.filter((d) => d.id !== trackerId));
@@ -142,32 +167,34 @@ export const DataProvider = ({ children }) => {
 
   // set streaks
   // TODO change to something way more efficient
-  useEffect(() => {
-    trackers.forEach((tracker) => {
-      const entries = getEntriesByTracker(tracker.id).sort((a, b) =>
-        b.dateKey.localeCompare(a.dateKey)
-      );
-      let streak = 0;
-      entries.some(({ dateKey, value }, i) => {
-        const dateToCompare = sub(new Date(), { days: i });
-        if (getDateKey(dateToCompare) === dateKey && value !== "false") {
-          streak++;
-          return false;
-        }
-        return true;
-      });
-      editTracker({ ...tracker, streak });
-    });
-  }, [entries]);
+  // useEffect(() => {
+  //   trackers.forEach((tracker) => {
+  //     const entries = getEntriesByTracker(tracker.id).sort((a, b) =>
+  //       b.dateKey.localeCompare(a.dateKey)
+  //     );
+  //     let streak = 0;
+  //     entries.some(({ dateKey, value }, i) => {
+  //       const dateToCompare = sub(new Date(), { days: i });
+  //       if (getDateKey(dateToCompare) === dateKey && value !== "false") {
+  //         streak++;
+  //         return false;
+  //       }
+  //       return true;
+  //     });
+  //     editTracker({ ...tracker, streak });
+  //   });
+  // }, [entries]);
 
   return (
     <DataContext.Provider
       value={{
+        groups,
         trackers,
         entries,
         getTracker,
         addTracker,
         editTracker,
+        setTracker,
         deleteTracker,
         setTrackerOrder,
         getEntry,

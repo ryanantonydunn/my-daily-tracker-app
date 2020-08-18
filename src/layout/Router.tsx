@@ -9,9 +9,13 @@ import EnterSingle from "../views/EnterSingle";
 import Home from "../views/home/Home";
 import TrackerForm from "../views/TrackerForm";
 import TrackerView from "../views/TrackerView";
+import EditTrackers from "../views/EditTrackers";
+import CustomTracker from "../views/CustomTracker";
 
 export type StackParamList = {
   Home: { date: string };
+  EditTrackers: undefined;
+  CustomTracker: { trackerId?: string };
   TrackerView: { trackerId: string };
   AddTracker: undefined;
   EditTracker: { trackerId: string };
@@ -40,12 +44,18 @@ const Router = () => {
         component={TrackerView}
         initialParams={{ trackerId: null }}
       />
-      <Stack.Screen name="AddTracker" component={TrackerForm} />
+      <Stack.Screen name="EditTrackers" component={EditTrackers} />
+      <Stack.Screen
+        name="CustomTracker"
+        component={CustomTracker}
+        initialParams={{ trackerId: null }}
+      />
       <Stack.Screen
         name="EditTracker"
         component={TrackerForm}
         initialParams={{ trackerId: null }}
       />
+
       <Stack.Screen name="EnterAll" component={EnterAll} />
       <Stack.Screen name="EnterSingle" component={EnterSingle} />
       <Stack.Screen name="ChooseDate" component={ChooseDate} />

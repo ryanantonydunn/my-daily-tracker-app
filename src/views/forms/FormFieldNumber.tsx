@@ -24,7 +24,7 @@ const FormFieldNumber = ({
   useEffect(() => setTempValue(value), [value]);
 
   return (
-    <FormContainer fixedHeight>
+    <FormContainer>
       {title}
       <TextInput
         autoFocus

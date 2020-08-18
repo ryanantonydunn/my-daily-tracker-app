@@ -25,9 +25,14 @@ interface LayoutWithHeaderProps {
   hasKeyboard?: boolean;
 }
 
+export const HEADER_HEIGHT = 50;
+
 const styles = StyleSheet.create({
   wrapper: tw(`flex-1`),
-  header: tw(`flex-row items-center justify-between h-12`),
+  header: {
+    ...tw(`flex-row items-center justify-between`),
+    height: HEADER_HEIGHT,
+  },
   cell: tw(`w-12 items-center`),
   iconButton: tw(`p-2`),
   title: tw(`text-lg text-white`),
@@ -48,7 +53,10 @@ const LayoutWithHeader = ({
   return (
     <>
       <StatusBar animated barStyle="light-content" />
-      <SafeView top left right>
+      <SafeView top>
+        <Gradient col1="green-600" col2="teal-600" />
+      </SafeView>
+      <SafeView left right>
         <Gradient col1="green-500" col2="teal-500" />
         <View style={styles.header}>
           <View style={styles.cell}>

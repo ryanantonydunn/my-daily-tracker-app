@@ -16,7 +16,7 @@ import { getDateKey } from "../../utils/getDateKey";
 const CELL_SIZE = 50;
 
 const styles = StyleSheet.create({
-  days: tw(`flex-row items-center justify-end pr-3 border-b border-gray-300`),
+  days: tw(`flex-row items-center justify-end border-b border-gray-300`),
   day: {
     ...tw(`items-center justify-center bg-white`),
     width: CELL_SIZE,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   dayText: tw(`text-gray-500 text-xs uppercase`),
   dateText: tw(``),
 
-  trackerRow: tw(`flex-row items-stretch border-b border-gray-300 pr-3`),
+  trackerRow: tw(`flex-row items-stretch border-b border-gray-300`),
   trackerLabelContainer: tw(`flex-1`),
   trackerLabelButton: {
     ...tw(`flex-1 justify-center items-start pl-2`),
@@ -128,6 +128,7 @@ const TrackerTable = ({ date }) => {
             <T style={styles.dateText}>{format(date, "d")}</T>
           </View>
         ))}
+        <View style={tw(`w-3`)} />
       </SafeView>
 
       {trackers.map((tracker) => (
@@ -169,6 +170,7 @@ const TrackerTable = ({ date }) => {
               </TouchableOpacity>
             );
           })}
+          <View style={tw(`w-3`)} />
         </SafeView>
       ))}
     </>

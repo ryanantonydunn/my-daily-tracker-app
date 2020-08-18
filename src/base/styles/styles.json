@@ -1556,6 +1556,9 @@
 	"h-24": {
 		"height": 96
 	},
+	"h-28": {
+		"height": 112
+	},
 	"h-32": {
 		"height": 128
 	},
@@ -1715,6 +1718,12 @@
 		"marginBottom": 96,
 		"marginLeft": 96
 	},
+	"m-28": {
+		"marginTop": 112,
+		"marginRight": 112,
+		"marginBottom": 112,
+		"marginLeft": 112
+	},
 	"m-32": {
 		"marginTop": 128,
 		"marginRight": 128,
@@ -1828,6 +1837,12 @@
 		"marginRight": -96,
 		"marginBottom": -96,
 		"marginLeft": -96
+	},
+	"-m-28": {
+		"marginTop": -112,
+		"marginRight": -112,
+		"marginBottom": -112,
+		"marginLeft": -112
 	},
 	"-m-32": {
 		"marginTop": -128,
@@ -1976,6 +1991,14 @@
 	"mx-24": {
 		"marginLeft": 96,
 		"marginRight": 96
+	},
+	"my-28": {
+		"marginTop": 112,
+		"marginBottom": 112
+	},
+	"mx-28": {
+		"marginLeft": 112,
+		"marginRight": 112
 	},
 	"my-32": {
 		"marginTop": 128,
@@ -2128,6 +2151,14 @@
 	"-mx-24": {
 		"marginLeft": -96,
 		"marginRight": -96
+	},
+	"-my-28": {
+		"marginTop": -112,
+		"marginBottom": -112
+	},
+	"-mx-28": {
+		"marginLeft": -112,
+		"marginRight": -112
 	},
 	"-my-32": {
 		"marginTop": -128,
@@ -2344,6 +2375,18 @@
 	},
 	"ml-24": {
 		"marginLeft": 96
+	},
+	"mt-28": {
+		"marginTop": 112
+	},
+	"mr-28": {
+		"marginRight": 112
+	},
+	"mb-28": {
+		"marginBottom": 112
+	},
+	"ml-28": {
+		"marginLeft": 112
 	},
 	"mt-32": {
 		"marginTop": 128
@@ -2572,6 +2615,18 @@
 	},
 	"-ml-24": {
 		"marginLeft": -96
+	},
+	"-mt-28": {
+		"marginTop": -112
+	},
+	"-mr-28": {
+		"marginRight": -112
+	},
+	"-mb-28": {
+		"marginBottom": -112
+	},
+	"-ml-28": {
+		"marginLeft": -112
 	},
 	"-mt-32": {
 		"marginTop": -128
@@ -2816,6 +2871,12 @@
 		"paddingBottom": 96,
 		"paddingLeft": 96
 	},
+	"p-28": {
+		"paddingTop": 112,
+		"paddingRight": 112,
+		"paddingBottom": 112,
+		"paddingLeft": 112
+	},
 	"p-32": {
 		"paddingTop": 128,
 		"paddingRight": 128,
@@ -2963,6 +3024,14 @@
 	"px-24": {
 		"paddingLeft": 96,
 		"paddingRight": 96
+	},
+	"py-28": {
+		"paddingTop": 112,
+		"paddingBottom": 112
+	},
+	"px-28": {
+		"paddingLeft": 112,
+		"paddingRight": 112
 	},
 	"py-32": {
 		"paddingTop": 128,
@@ -3179,6 +3248,18 @@
 	},
 	"pl-24": {
 		"paddingLeft": 96
+	},
+	"pt-28": {
+		"paddingTop": 112
+	},
+	"pr-28": {
+		"paddingRight": 112
+	},
+	"pb-28": {
+		"paddingBottom": 112
+	},
+	"pl-28": {
+		"paddingLeft": 112
 	},
 	"pt-32": {
 		"paddingTop": 128
@@ -3765,6 +3846,9 @@
 	},
 	"w-24": {
 		"width": 96
+	},
+	"w-28": {
+		"width": 112
 	},
 	"w-32": {
 		"width": 128
