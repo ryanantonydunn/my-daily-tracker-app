@@ -117,7 +117,7 @@ const TrackerTable = ({ date }) => {
   const numberOfDays = Math.floor((screenWidth - 160) / CELL_SIZE);
   const navigation = useNavigation();
   const dates = prepareDates(numberOfDays, date);
-  const { trackers, getEntry, setEntry } = useContext(DataContext);
+  const { activeTrackers, getEntry, setEntry } = useContext(DataContext);
 
   return (
     <>
@@ -131,7 +131,7 @@ const TrackerTable = ({ date }) => {
         <View style={tw(`w-3`)} />
       </SafeView>
 
-      {trackers.map((tracker) => (
+      {activeTrackers.map((tracker) => (
         <SafeView left right key={tracker.id} style={styles.trackerRow}>
           <View style={styles.trackerLabelContainer}>
             <TouchableOpacity

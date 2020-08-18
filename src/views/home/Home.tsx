@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import DayShifter from "../../base/DayShifter";
@@ -8,6 +8,8 @@ import { tw } from "../../base/styles/tailwind";
 import T from "../../base/Text";
 import LayoutWithHeader from "../../layout/LayoutWithHeader";
 import SafeView from "../../layout/SafeView";
+import DataContext from "../../store/DataContext";
+import GetStarted from "../GetStarted";
 import TrackerTable from "./TrackerTable";
 
 const styles = StyleSheet.create({
@@ -28,7 +30,10 @@ const Home = ({ route, navigation }) => {
   const date = new Date(route.params.date);
   const setDate = (date) => navigation.setParams({ date: date.toISOString() });
 
-  return (
+  const { trackers } = useContext(DataContext);
+  const hasTrackers = trackers.some(({ disabled }) => !disabled);
+
+  return hasTrackers ? (
     <LayoutWithHeader
       logo
       menu={[
@@ -65,6 +70,8 @@ const Home = ({ route, navigation }) => {
       </View>
       <SafeView bottom />
     </LayoutWithHeader>
+  ) : (
+    <GetStarted />
   );
 };
 

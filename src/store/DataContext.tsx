@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { getDateKey } from "../utils/getDateKey";
-import sub from "date-fns/sub";
+import React, { useMemo, useState } from "react";
 
 export type TrackerType = "slider" | "number" | "text" | "boolean";
 
@@ -28,6 +26,7 @@ export interface Entry {
 interface DataContext {
   groups: TrackerGroup[];
   trackers: Tracker[];
+  activeTrackers: Tracker[];
   entries: Entry[];
   getTracker: Function;
   addTracker: Function;
@@ -111,6 +110,11 @@ export const DataProvider = ({ children }) => {
   const [trackers, setTrackers] = useState<Tracker[]>(startTrackers);
   const [entries, setEntries] = useState<Entry[]>([]);
 
+  const activeTrackers = useMemo(
+    () => trackers.filter(({ disabled }) => !disabled),
+    [trackers]
+  );
+
   const getTracker = (trackerId) => trackers.find(({ id }) => id === trackerId);
 
   const addTracker = (tracker) => setTrackers((arr) => [...arr, tracker]);
@@ -190,6 +194,7 @@ export const DataProvider = ({ children }) => {
       value={{
         groups,
         trackers,
+        activeTrackers,
         entries,
         getTracker,
         addTracker,
