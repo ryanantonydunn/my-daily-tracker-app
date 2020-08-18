@@ -22,7 +22,6 @@ interface LayoutWithHeaderProps {
   back?: string | true;
   menu?: DropdownItem[];
   children: ReactNode;
-  hasKeyboard?: boolean;
 }
 
 export const HEADER_HEIGHT = 50;
@@ -44,7 +43,6 @@ const LayoutWithHeader = ({
   back,
   menu,
   children,
-  hasKeyboard = false,
 }: LayoutWithHeaderProps) => {
   const navigation = useNavigation();
   const [menuOpen, setMenuOpen] = useState(false);

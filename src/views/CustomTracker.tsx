@@ -73,7 +73,7 @@ const Page = ({ children, title, hasKeyboard = false }) => (
 );
 
 const CustomTracker = ({ route, navigation }) => {
-  const { trackerId } = route.params;
+  const { trackerId, back } = route.params;
   const { setTracker, getTracker } = useContext(DataContext);
   const tracker = getTracker(trackerId);
 
@@ -86,11 +86,14 @@ const CustomTracker = ({ route, navigation }) => {
   const save = (color) => {
     const existingTracker = tracker || newTracker();
     setTracker({ ...existingTracker, label, type, color });
-    navigation.navigate("EditTrackers");
+    navigation.navigate(
+      back,
+      back === "TrackerView" && { trackerId: existingTracker.id }
+    );
   };
 
   return (
-    <LayoutWithHeader title="Custom Tracker" back="EditTrackers">
+    <LayoutWithHeader title="Custom Tracker" back>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

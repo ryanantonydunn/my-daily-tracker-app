@@ -7,7 +7,6 @@ import ChooseDate from "../views/ChooseDate";
 import EnterAll from "../views/EnterAll";
 import EnterSingle from "../views/EnterSingle";
 import Home from "../views/home/Home";
-import TrackerForm from "../views/TrackerForm";
 import TrackerView from "../views/TrackerView";
 import EditTrackers from "../views/EditTrackers";
 import CustomTracker from "../views/CustomTracker";
@@ -15,7 +14,7 @@ import CustomTracker from "../views/CustomTracker";
 export type StackParamList = {
   Home: { date: string };
   EditTrackers: undefined;
-  CustomTracker: { trackerId?: string };
+  CustomTracker: { trackerId?: string; back?: string };
   TrackerView: { trackerId: string };
   AddTracker: undefined;
   EditTracker: { trackerId: string };
@@ -48,14 +47,8 @@ const Router = () => {
       <Stack.Screen
         name="CustomTracker"
         component={CustomTracker}
-        initialParams={{ trackerId: null }}
+        initialParams={{ trackerId: null, back: "EditTrackers" }}
       />
-      <Stack.Screen
-        name="EditTracker"
-        component={TrackerForm}
-        initialParams={{ trackerId: null }}
-      />
-
       <Stack.Screen name="EnterAll" component={EnterAll} />
       <Stack.Screen name="EnterSingle" component={EnterSingle} />
       <Stack.Screen name="ChooseDate" component={ChooseDate} />

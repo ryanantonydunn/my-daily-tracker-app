@@ -12,7 +12,24 @@ const TrackerView = ({ route, navigation }) => {
   const title = tracker?.label || "Unknown Tracker";
 
   return (
-    <LayoutWithHeader title={title} back="Home">
+    <LayoutWithHeader
+      title={title}
+      back="Home"
+      menu={[
+        {
+          onPress: () =>
+            navigation.navigate("CustomTracker", {
+              trackerId: tracker?.id,
+              back: "TrackerView",
+            }),
+          children: "Edit",
+        },
+        {
+          onPress: () => {},
+          children: "Delete",
+        },
+      ]}
+    >
       {!!tracker && (
         <ScrollView>
           <T>{trackerId}</T>
