@@ -11,7 +11,7 @@ import { textStyles } from "../../base/Text";
 import { FormFieldProps } from "./FormField";
 
 const styles = StyleSheet.create({
-  container: tw(`relative self-stretch flex-1`),
+  cont: tw(`relative self-stretch flex-1`),
   scroll: tw(`pt-6 self-stretch flex-1`),
   content: tw(`items-center`),
   input: {
@@ -31,7 +31,7 @@ const FormFieldText = ({ title, highlight, value, onSave }: FormFieldProps) => {
   useEffect(() => setTempValue(value), [value]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.cont}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         {title}
         <TextInput

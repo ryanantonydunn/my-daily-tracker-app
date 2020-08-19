@@ -9,15 +9,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native-gesture-handler";
+import Icon from "../base/Icon";
 import { col, tw } from "../base/styles/tailwind";
 import T, { textStyles } from "../base/Text";
+import { trackerTypes } from "../base/TrackerTitle";
+import FixedHeight from "../layout/FixedHeight";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
-import FormContainer from "../layout/FormContainer";
 import SafeView from "../layout/SafeView";
 import DataContext, { newTracker } from "../store/DataContext";
-import { trackerTypes } from "../base/TrackerTitle";
-import Icon from "../base/Icon";
-import FixedHeight from "../layout/FixedHeight";
 
 const styles = StyleSheet.create({
   scroll: tw(`flex-grow bg-white`),

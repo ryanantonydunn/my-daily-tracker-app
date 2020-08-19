@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { tw } from "../../base/styles/tailwind";
 import { textStyles } from "../../base/Text";
-import FormContainer from "../../layout/FormContainer";
 import formatNumber from "../../utils/formatNumber";
 import { FormFieldProps } from "./FormField";
 
 const styles = StyleSheet.create({
+  cont: tw(`relative self-stretch flex-1 items-center pt-6`),
   input: {
-    ...tw(`self-stretch text-center`),
+    ...tw(`self-stretch text-center p-4`),
     ...textStyles.base,
   },
 });
@@ -24,7 +24,7 @@ const FormFieldNumber = ({
   useEffect(() => setTempValue(value), [value]);
 
   return (
-    <FormContainer>
+    <View style={styles.cont}>
       {title}
       <TextInput
         autoFocus
@@ -38,7 +38,7 @@ const FormFieldNumber = ({
         style={styles.input}
         placeholder="Enter number..."
       />
-    </FormContainer>
+    </View>
   );
 };
 

@@ -6,19 +6,25 @@ import { HEADER_HEIGHT } from "./LayoutWithHeader";
 interface FixedHeightProps {
   children: ReactNode;
   enabled?: boolean;
+  grow?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
 const FixedHeight = ({
   children,
   enabled = false,
+  grow = false,
   style,
 }: FixedHeightProps) => {
   const { safeHeight } = useContext(UIContext);
   const height = safeHeight - HEADER_HEIGHT;
   return (
     <>
-      <View style={[enabled && { height }, style]}>{children}</View>
+      <View
+        style={[enabled && { height }, grow && !enabled && { flex: 1 }, style]}
+      >
+        {children}
+      </View>
     </>
   );
 };

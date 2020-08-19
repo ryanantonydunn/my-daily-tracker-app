@@ -6,7 +6,7 @@ import React from "react";
 import ChooseDate from "../views/ChooseDate";
 import EnterAll from "../views/EnterAll";
 import EnterSingle from "../views/EnterSingle";
-import Home from "../views/home/Home";
+import Home from "../views/Home";
 import TrackerView from "../views/TrackerView";
 import EditTrackers from "../views/EditTrackers";
 import CustomTracker from "../views/CustomTracker";

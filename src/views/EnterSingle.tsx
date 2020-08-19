@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import DayShifter from "../base/DayShifter";
 import { tw } from "../base/styles/tailwind";
 import TrackerTitle from "../base/TrackerTitle";
+import FixedHeight from "../layout/FixedHeight";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
 import SafeView from "../layout/SafeView";
 import DataContext from "../store/DataContext";
@@ -11,9 +12,8 @@ import { getDateFromKey, getDateKey } from "../utils/getDateKey";
 import { getTrackerComponent } from "./forms/FormField";
 
 const styles = StyleSheet.create({
-  safeView: tw(`flex-1 pt-0`),
-  scroll: tw(`flex-grow`),
-  entryForm: tw(`flex-1 items-center justify-center bg-white`),
+  scroll: tw(`flex-grow bg-white`),
+  entryForm: tw(`flex-1 items-center justify-center`),
 });
 
 const EnterSingle = ({ route, navigation }) => {
@@ -30,24 +30,26 @@ const EnterSingle = ({ route, navigation }) => {
   const hasKeyboard = ["number", "text"].includes(tracker.type);
 
   return (
-    <LayoutWithHeader hasKeyboard={hasKeyboard} title="Make Entry" back="Home">
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <DayShifter value={date} onChange={setDate} page="EnterSingle" />
-        <SafeView left right style={styles.entryForm}>
-          {!!tracker && (
-            <FormFieldComponent
-              title={<TrackerTitle tracker={tracker} style={tw(`mb-4`)} />}
-              highlight={tracker.color}
-              value={value}
-              onSave={(value) => {
-                setEntry(tracker, dateKey, value);
-                navigation.navigate("Home");
-              }}
-            />
-          )}
-        </SafeView>
-        {!hasKeyboard && <SafeView bottom />}
-      </ScrollView>
+    <LayoutWithHeader title="Make Entry" back="Home">
+      <FixedHeight grow enabled={!hasKeyboard}>
+        <ScrollView contentContainerStyle={styles.scroll}>
+          <DayShifter value={date} onChange={setDate} page="EnterSingle" />
+          <SafeView left right style={styles.entryForm}>
+            {!!tracker && (
+              <FormFieldComponent
+                title={<TrackerTitle tracker={tracker} style={tw(`mb-4`)} />}
+                highlight={tracker.color}
+                value={value}
+                onSave={(value) => {
+                  setEntry(tracker, dateKey, value);
+                  navigation.navigate("Home");
+                }}
+              />
+            )}
+          </SafeView>
+          {!hasKeyboard && <SafeView bottom />}
+        </ScrollView>
+      </FixedHeight>
     </LayoutWithHeader>
   );
 };

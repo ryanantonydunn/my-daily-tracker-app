@@ -117,14 +117,15 @@ const ChooseDate = ({ route, navigation }) => {
                     styles.date,
                     showRightBorder(d.day) && tw(`border-r`),
                     showBottomBorder(d.day) && tw(`border-b`),
+                    d.isCurrent && tw(`bg-green-100`),
                     d.disabled && tw(`bg-gray-200`),
-                    d.isCurrent && tw(`bg-green-500`),
                   ]}
                 >
                   <T
+                    bold={d.isCurrent}
                     style={[
                       styles.dateText,
-                      d.isCurrent && tw(`text-white`),
+                      d.isCurrent && tw(`text-green-500 `),
                       d.disabled && tw(`text-gray-500`),
                     ]}
                   >
