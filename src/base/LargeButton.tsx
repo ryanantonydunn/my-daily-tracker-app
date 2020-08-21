@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
 
 interface LargeButtonProps {
   onPress: Function;
-  secondary?: boolean;
   title: string;
   style?: StyleProp<ViewStyle>;
 }

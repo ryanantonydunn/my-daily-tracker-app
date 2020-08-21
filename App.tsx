@@ -5,6 +5,7 @@ import { FontProvider } from "./src/base/Text";
 import Router from "./src/layout/Router";
 import { DataProvider } from "./src/store/DataContext";
 import { UIProvider } from "./src/store/UIContext";
+import Modal from "./src/layout/Modal";
 import TestLayout from "./TestLayout";
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
             <UIProvider>
               <Router />
               {/* <TestLayout /> */}
+              <Modal />
             </UIProvider>
           </DataProvider>
         </FontProvider>

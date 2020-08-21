@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import ConfirmDelete from "../base/ConfirmDelete";
 import Icon from "../base/Icon";
 import LargeButton from "../base/LargeButton";
 import { tw } from "../base/styles/tailwind";
@@ -9,6 +10,7 @@ import TrackerTitle from "../base/TrackerTitle";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
 import SafeView from "../layout/SafeView";
 import DataContext from "../store/DataContext";
+import UIContext from "../store/UIContext";
 
 const styles = StyleSheet.create({
   scroll: tw(`flex-grow justify-between bg-white`),
@@ -30,9 +32,12 @@ const styles = StyleSheet.create({
 });
 
 const EditTrackers = ({ navigation }) => {
+  const { setModal } = useContext(UIContext);
   const [actionButtonTrackerId, setActionButtonTrackerId] = useState("");
 
-  const { groups, trackers, editTracker } = useContext(DataContext);
+  const { groups, trackers, editTracker, deleteTracker } = useContext(
+    DataContext
+  );
   const toggle = (tracker) => {
     setActionButtonTrackerId("");
     editTracker({ ...tracker, disabled: !tracker.disabled });
@@ -85,7 +90,14 @@ const EditTrackers = ({ navigation }) => {
                         <View style={styles.buttonCell}>
                           <TouchableOpacity
                             style={styles.buttonCellInner}
-                            onPress={() => toggle(tracker)}
+                            onPress={() =>
+                              setModal(
+                                <ConfirmDelete
+                                  cancel={() => setModal()}
+                                  confirm={() => deleteTracker(tracker.id)}
+                                />
+                              )
+                            }
                           >
                             <Icon name="delete" color="red-400" />
                           </TouchableOpacity>

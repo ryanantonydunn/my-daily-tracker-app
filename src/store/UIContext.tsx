@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { useSafeArea } from "react-native-safe-area-context";
 
@@ -9,6 +9,8 @@ interface UIContext {
   safeWidth: number;
   safeHeight: number;
   isPortrait: boolean;
+  modal: ReactNode | undefined;
+  setModal: Function;
 }
 
 const UIContext = React.createContext<Partial<UIContext>>({
@@ -18,6 +20,8 @@ const UIContext = React.createContext<Partial<UIContext>>({
   safeWidth: 0,
   safeHeight: 0,
   isPortrait: true,
+  modal: undefined,
+  setModal: () => {},
 });
 
 export const UIProvider = ({ children }) => {
@@ -26,6 +30,7 @@ export const UIProvider = ({ children }) => {
   const [screenHeight, setScreenHeight] = useState(0);
   const [safeWidth, setSafeWidth] = useState(0);
   const [safeHeight, setSafeHeight] = useState(0);
+  const [modal, setModal] = useState();
 
   const onLayout = () => {
     const d = Dimensions.get("window");
@@ -45,6 +50,8 @@ export const UIProvider = ({ children }) => {
           safeWidth,
           safeHeight,
           isPortrait: screenWidth < screenHeight,
+          modal,
+          setModal,
         }}
       >
         {children}
