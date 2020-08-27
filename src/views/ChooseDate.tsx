@@ -9,22 +9,15 @@ import LargeButton from "../base/LargeButton";
 import MonthShifter from "../base/MonthShifter";
 import { tw } from "../base/styles/tailwind";
 import T from "../base/Text";
+import WeekDays from "../base/WeekDays";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
 import SafeView from "../layout/SafeView";
-
-const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const WIDTH = 300;
 
 const styles = StyleSheet.create({
   scroll: tw(`flex-grow`),
   container: tw(`flex-1 bg-white justify-between`),
-  days: tw(`flex-row`),
-  dayContainer: {
-    ...tw(`h-10 justify-center`),
-    width: WIDTH / 7,
-  },
-  day: tw(`text-gray-500 text-xs uppercase`),
   calendar: tw(`items-center justify-center mb-6 mt-4`),
   calendarContainer: {
     ...tw(`flex-row flex-wrap border border-gray-400 rounded-lg`),
@@ -58,10 +51,9 @@ const ChooseDate = ({ route, navigation }) => {
     return Array.from({ length: numberOfDays }, (_, i) => {
       const day = i + 1;
       const date = new Date(year, month, day);
-      const label = format(date, "E do MMMM, yyyy");
       const disabled = isDisabled(date);
       const isCurrent = isSameDay(date, current);
-      return { day, date, label, disabled, isCurrent };
+      return { day, date, disabled, isCurrent };
     });
   }, [isDisabled, month, year]);
 
@@ -86,13 +78,7 @@ const ChooseDate = ({ route, navigation }) => {
         <MonthShifter value={activeMonth} onChange={setActiveMonth} />
         <SafeView left right style={styles.container}>
           <View style={styles.calendar}>
-            <View style={styles.days}>
-              {weekDays.map((day) => (
-                <View key={day} style={styles.dayContainer}>
-                  <T style={styles.day}>{day}</T>
-                </View>
-              ))}
-            </View>
+            <WeekDays width={WIDTH / 7} />
             <View style={styles.calendarContainer}>
               {offset !== 0 && (
                 <View
@@ -106,7 +92,7 @@ const ChooseDate = ({ route, navigation }) => {
               )}
               {days.map((d) => (
                 <TouchableOpacity
-                  key={d.label}
+                  key={d.day}
                   onPress={() => {
                     navigation.navigate("Home", {
                       date: d.date.toISOString(),

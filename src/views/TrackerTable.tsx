@@ -1,12 +1,13 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import format from "date-fns/format";
 import isToday from "date-fns/isToday";
 import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import DayShifter from "../base/DayShifter";
+import EntryBall from "../base/EntryBall";
 import Icon from "../base/Icon";
-import { col, tw } from "../base/styles/tailwind";
+import { tw } from "../base/styles/tailwind";
 import T from "../base/Text";
 import TrackerTitle from "../base/TrackerTitle";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
@@ -42,9 +43,6 @@ const styles = StyleSheet.create({
     height: CELL_SIZE + 10,
   },
 
-  valueBall: tw(`items-center justify-center w-10 h-10 rounded-full`),
-  valueEmpty: tw(`bg-white border border-gray-400`),
-
   newTracker: tw(`flex-row items-center justify-center p-8`),
   newTrackerText: tw(`ml-2 text-sm text-center`),
 });
@@ -63,57 +61,6 @@ const prepareDates = (n, date) =>
   });
 
 /**
- * Render the value of an entry in the table
- */
-const renderVal = ({ entry, tracker }) => {
-  const empty = (
-    <View style={[styles.valueBall, styles.valueEmpty]}>
-      <Icon size={18} color="gray-400" name="add" />
-    </View>
-  );
-  if (!entry || !tracker || entry.value === "") return empty;
-
-  // Numbers
-  if (["number", "slider"].includes(tracker.type)) {
-    const fontSize = (0.85 - entry.value.length * 0.07) * 20;
-    return (
-      <View style={[styles.valueBall, { backgroundColor: col(tracker.color) }]}>
-        <T style={{ color: "white", fontSize }}>{entry.value}</T>
-      </View>
-    );
-
-    // Booleans
-  } else if (tracker.type === "boolean") {
-    return (
-      <View
-        style={[
-          styles.valueBall,
-          {
-            backgroundColor:
-              entry.value === "true" ? col(tracker.color) : col("gray-400"),
-          },
-        ]}
-      >
-        <Icon
-          color="white"
-          name={entry.value === "true" ? "check" : "close"}
-          size={18}
-        />
-      </View>
-    );
-    // Text
-  } else if (tracker.type === "text" && entry.value) {
-    return (
-      <View style={[styles.valueBall, { backgroundColor: col(tracker.color) }]}>
-        <Icon color="white" name="short-text" />
-      </View>
-    );
-  } else {
-    return empty;
-  }
-};
-
-/**
  * Main table of tracker entries
  */
 
@@ -129,15 +76,7 @@ const TrackerTable = ({ route }) => {
   const { activeTrackers, getEntry, setEntry } = useContext(DataContext);
 
   return (
-    <LayoutWithHeader
-      logo
-      menu={[
-        {
-          onPress: setDate,
-          children: "View on date",
-        },
-      ]}
-    >
+    <LayoutWithHeader logo>
       <ScrollView style={styles.container}>
         <DayShifter value={date} onChange={setDate} page="Home" />
 
@@ -164,35 +103,14 @@ const TrackerTable = ({ route }) => {
               </TouchableOpacity>
             </View>
 
-            {dates.map(({ date, dateKey }) => {
-              const entry = getEntry({ trackerId: tracker.id, dateKey });
-              return (
-                <TouchableOpacity
-                  key={dateKey}
-                  style={[styles.entryContainer, isToday(date) && styles.today]}
-                  onPress={() => {
-                    if (tracker.type === "boolean") {
-                      const entry = getEntry({
-                        trackerId: tracker.id,
-                        dateKey,
-                      });
-                      setEntry(
-                        tracker,
-                        dateKey,
-                        entry?.value === "true" ? "false" : "true"
-                      );
-                    } else {
-                      navigation.navigate("EnterSingle", {
-                        trackerId: tracker.id,
-                        dateKey,
-                      });
-                    }
-                  }}
-                >
-                  {renderVal({ entry, tracker })}
-                </TouchableOpacity>
-              );
-            })}
+            {dates.map(({ date, dateKey }) => (
+              <View
+                key={dateKey}
+                style={[styles.entryContainer, isToday(date) && styles.today]}
+              >
+                <EntryBall trackerId={tracker.id} dateKey={dateKey} />
+              </View>
+            ))}
             <View style={tw(`w-3`)} />
           </SafeView>
         ))}
