@@ -1,27 +1,9 @@
 import React, { useMemo, useState } from "react";
-
-export type TrackerType = "slider" | "number" | "text" | "boolean";
-
-export interface TrackerGroup {
-  id: string;
-  label: string;
-}
-
-export interface Tracker {
-  id: string;
-  label: string;
-  type: TrackerType;
-  color: string;
-  disabled: boolean;
-  group: string;
-}
-
-export interface Entry {
-  id: string;
-  trackerId: string;
-  dateKey: string;
-  value: string;
-}
+import getNewId from "../utils/getNewId";
+import isDateWithinRange from "../utils/isDateWithinRange";
+import { Entry, Tracker, TrackerGroup } from "./dataTypes";
+import exampleEntries from "./exampleEntries";
+import initialTrackers from "./initialTrackers";
 
 interface DataContext {
   groups: TrackerGroup[];
@@ -35,15 +17,14 @@ interface DataContext {
   deleteTracker: Function;
   setTrackerOrder: Function;
   getEntry: Function;
+  findEntries: Function;
   addEntry: Function;
   editEntry: Function;
   setEntry: Function;
 }
 
-const newId = () => `local-${String(Math.random()).slice(2)}`;
-
 export const newTracker = (): Tracker => ({
-  id: newId(),
+  id: getNewId(),
   type: "boolean",
   label: "",
   color: "green-500",
@@ -66,49 +47,12 @@ const startGroups: TrackerGroup[] = [
   },
 ];
 
-const startTrackers: Tracker[] = [
-  {
-    id: "mood-happy",
-    type: "slider",
-    label: "Happy",
-    color: "green-500",
-    disabled: true,
-    group: "mood",
-  },
-  {
-    id: "mood-anxious",
-    type: "text",
-    label: "Anxious",
-    color: "red-500",
-    disabled: true,
-    group: "mood",
-  },
-  {
-    id: "124",
-    type: "boolean",
-    label: "Meditation",
-    color: "yellow-600",
-    disabled: true,
-    group: "activities",
-  },
-  {
-    id: "125",
-    type: "number",
-    label: "Run (km)",
-    color: "teal-500",
-    disabled: true,
-    group: "activities",
-  },
-];
-
-const DataContext = React.createContext<Partial<DataContext>>({
-  trackers: startTrackers,
-});
+const DataContext = React.createContext<Partial<DataContext>>({});
 
 export const DataProvider = ({ children }) => {
   const [groups, setGroups] = useState<TrackerGroup[]>(startGroups);
-  const [trackers, setTrackers] = useState<Tracker[]>(startTrackers);
-  const [entries, setEntries] = useState<Entry[]>([]);
+  const [trackers, setTrackers] = useState<Tracker[]>(initialTrackers);
+  const [entries, setEntries] = useState<Entry[]>(exampleEntries());
 
   const activeTrackers = useMemo(
     () => trackers.filter(({ disabled }) => !disabled),
@@ -145,8 +89,15 @@ export const DataProvider = ({ children }) => {
   const getEntriesByTracker = (trackerId) =>
     entries.filter((d) => d.trackerId === trackerId);
 
+  const findEntries = (trackerId, minDate, maxDate) =>
+    entries.filter(
+      (d) =>
+        d.trackerId === trackerId &&
+        isDateWithinRange(d.dateKey, minDate, maxDate)
+    );
+
   const addEntry = (entry: Entry) => {
-    setEntries((d) => [...d, { ...entry, id: newId() }]);
+    setEntries((d) => [...d, { ...entry, id: getNewId() }]);
   };
 
   const editEntry = (entry) => {
@@ -203,6 +154,7 @@ export const DataProvider = ({ children }) => {
         deleteTracker,
         setTrackerOrder,
         getEntry,
+        findEntries,
         addEntry,
         editEntry,
         setEntry,

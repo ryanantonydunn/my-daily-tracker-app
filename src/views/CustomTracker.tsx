@@ -87,7 +87,10 @@ const CustomTracker = ({ route, navigation }) => {
     setTracker({ ...existingTracker, label, type, color });
     navigation.navigate(
       back,
-      back === "TrackerView" && { trackerId: existingTracker.id }
+      back === "TrackerView" && {
+        trackerId1: existingTracker.id,
+        trackerId2: undefined,
+      }
     );
   };
 

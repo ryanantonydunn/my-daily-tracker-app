@@ -20,7 +20,7 @@ class ErrorBoundary extends React.Component<
   state = { error: null, hasError: false };
 
   static getDerivedStateFromError(error: Error) {
-    return { error, hasError: true };
+    return { error: error.toString(), hasError: true };
   }
 
   resetError: Function = () => {

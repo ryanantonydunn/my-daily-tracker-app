@@ -4,7 +4,7 @@ import isToday from "date-fns/isToday";
 import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import DayShifter from "../base/DayShifter";
+import DateShifter, { DateShifterSafeContainer } from "../base/DateShifter";
 import EntryBall from "../base/EntryBall";
 import Icon from "../base/Icon";
 import { tw } from "../base/styles/tailwind";
@@ -20,6 +20,9 @@ const CELL_SIZE = 50;
 
 const styles = StyleSheet.create({
   container: tw(`flex-1 bg-white`),
+  cell: tw(`w-12 items-center`),
+  iconButton: tw(`p-2`),
+
   days: tw(`flex-row items-center justify-end border-b border-gray-300`),
   day: {
     ...tw(`items-center justify-center bg-white`),
@@ -78,8 +81,26 @@ const TrackerTable = ({ route }) => {
   return (
     <LayoutWithHeader logo>
       <ScrollView style={styles.container}>
-        <DayShifter value={date} onChange={setDate} page="Home" />
-
+        <DateShifterSafeContainer
+          left={<View style={styles.cell} />}
+          right={
+            <View style={styles.cell}>
+              <TouchableOpacity
+                style={styles.iconButton}
+                onPress={() => {
+                  navigation.navigate("ChooseDate", {
+                    current: date.toISOString(),
+                    page: "Home",
+                  });
+                }}
+              >
+                <Icon name="today" color="teal-500" />
+              </TouchableOpacity>
+            </View>
+          }
+        >
+          <DateShifter value={date} onChange={setDate} type="day" />
+        </DateShifterSafeContainer>
         <SafeView left right style={styles.days}>
           {dates.map(({ date }, i) => (
             <View key={i} style={[styles.day, isToday(date) && styles.today]}>
@@ -96,7 +117,10 @@ const TrackerTable = ({ route }) => {
               <TouchableOpacity
                 style={styles.trackerLabelButton}
                 onPress={() => {
-                  navigation.navigate("TrackerView", { trackerId: tracker.id });
+                  navigation.navigate("TrackerView", {
+                    trackerId1: tracker.id,
+                    trackerId2: undefined,
+                  });
                 }}
               >
                 <TrackerTitle sm tracker={tracker} />

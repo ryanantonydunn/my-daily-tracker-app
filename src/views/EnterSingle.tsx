@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
-import { StyleSheet } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import DayShifter from "../base/DayShifter";
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import DateShifter, { DateShifterSafeContainer } from "../base/DateShifter";
+import Icon from "../base/Icon";
 import { tw } from "../base/styles/tailwind";
 import TrackerTitle from "../base/TrackerTitle";
 import FixedHeight from "../layout/FixedHeight";
@@ -14,6 +15,8 @@ import { getTrackerComponent } from "./forms/FormField";
 const styles = StyleSheet.create({
   scroll: tw(`flex-grow bg-white`),
   entryForm: tw(`flex-1 items-center justify-center`),
+  cell: tw(`w-12 items-center`),
+  iconButton: tw(`p-2`),
 });
 
 const EnterSingle = ({ route, navigation }) => {
@@ -29,11 +32,35 @@ const EnterSingle = ({ route, navigation }) => {
 
   const hasKeyboard = ["number", "text"].includes(tracker.type);
 
+  useEffect(() => {
+    setDate(getDateFromKey(route.params.dateKey));
+  }, [route.params.dateKey]);
+
   return (
     <LayoutWithHeader title="Make Entry" back="Home">
       <FixedHeight grow enabled={!hasKeyboard}>
         <ScrollView contentContainerStyle={styles.scroll}>
-          <DayShifter value={date} onChange={setDate} page="EnterSingle" />
+          <DateShifterSafeContainer
+            left={<View style={styles.cell} />}
+            right={
+              <View style={styles.cell}>
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={() => {
+                    navigation.navigate("ChooseDate", {
+                      current: date.toISOString(),
+                      page: "EnterSingle",
+                    });
+                  }}
+                >
+                  <Icon name="today" color="teal-500" />
+                </TouchableOpacity>
+              </View>
+            }
+          >
+            <DateShifter value={date} onChange={setDate} type="day" />
+          </DateShifterSafeContainer>
+
           <SafeView left right style={styles.entryForm}>
             {!!tracker && (
               <FormFieldComponent

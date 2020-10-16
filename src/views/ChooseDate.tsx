@@ -1,17 +1,17 @@
-import format from "date-fns/format";
 import isAfter from "date-fns/isAfter";
 import isBefore from "date-fns/isBefore";
 import isSameDay from "date-fns/isSameDay";
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import DateShifter, { DateShifterSafeContainer } from "../base/DateShifter";
 import LargeButton from "../base/LargeButton";
-import MonthShifter from "../base/MonthShifter";
 import { tw } from "../base/styles/tailwind";
 import T from "../base/Text";
 import WeekDays from "../base/WeekDays";
 import LayoutWithHeader from "../layout/LayoutWithHeader";
 import SafeView from "../layout/SafeView";
+import { getDateKey } from "../utils/getDateKey";
 
 const WIDTH = 300;
 
@@ -72,10 +72,29 @@ const ChooseDate = ({ route, navigation }) => {
     [mondayFirst]
   );
 
+  const goToDate = (date) => {
+    console.log(date);
+    if (route.params.page === "EnterSingle") {
+      navigation.navigate("EnterSingle", {
+        dateKey: getDateKey(date),
+      });
+    } else if (route.params.page === "Home") {
+      navigation.navigate("Home", {
+        date: date.toISOString(),
+      });
+    }
+  };
+
   return (
-    <LayoutWithHeader title="View On Date" back="Home">
+    <LayoutWithHeader back title="View On Date">
       <ScrollView contentContainerStyle={styles.scroll}>
-        <MonthShifter value={activeMonth} onChange={setActiveMonth} />
+        <DateShifterSafeContainer>
+          <DateShifter
+            type="month"
+            value={activeMonth}
+            onChange={setActiveMonth}
+          />
+        </DateShifterSafeContainer>
         <SafeView left right style={styles.container}>
           <View style={styles.calendar}>
             <WeekDays width={WIDTH / 7} />
@@ -93,11 +112,7 @@ const ChooseDate = ({ route, navigation }) => {
               {days.map((d) => (
                 <TouchableOpacity
                   key={d.day}
-                  onPress={() => {
-                    navigation.navigate("Home", {
-                      date: d.date.toISOString(),
-                    });
-                  }}
+                  onPress={() => goToDate(d.date)}
                   disabled={d.disabled}
                   style={[
                     styles.date,
@@ -123,11 +138,7 @@ const ChooseDate = ({ route, navigation }) => {
           </View>
           <View style={tw(`p-2`)}>
             <LargeButton
-              onPress={() => {
-                navigation.navigate("Home", {
-                  date: new Date().toISOString(),
-                });
-              }}
+              onPress={() => goToDate(new Date())}
               title="Jump to Today"
             />
           </View>

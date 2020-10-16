@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useState } from "react";
-import { Modal, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import ConfirmDelete from "../base/ConfirmDelete";
 import Icon from "../base/Icon";

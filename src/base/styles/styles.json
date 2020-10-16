@@ -1574,6 +1574,9 @@
 	"h-64": {
 		"height": 256
 	},
+	"h-72": {
+		"height": 288
+	},
 	"h-px": {
 		"height": 1
 	},
@@ -1754,6 +1757,12 @@
 		"marginBottom": 256,
 		"marginLeft": 256
 	},
+	"m-72": {
+		"marginTop": 288,
+		"marginRight": 288,
+		"marginBottom": 288,
+		"marginLeft": 288
+	},
 	"m-px": {
 		"marginTop": 1,
 		"marginRight": 1,
@@ -1873,6 +1882,12 @@
 		"marginRight": -256,
 		"marginBottom": -256,
 		"marginLeft": -256
+	},
+	"-m-72": {
+		"marginTop": -288,
+		"marginRight": -288,
+		"marginBottom": -288,
+		"marginLeft": -288
 	},
 	"-m-px": {
 		"marginTop": -1,
@@ -2040,6 +2055,14 @@
 		"marginLeft": 256,
 		"marginRight": 256
 	},
+	"my-72": {
+		"marginTop": 288,
+		"marginBottom": 288
+	},
+	"mx-72": {
+		"marginLeft": 288,
+		"marginRight": 288
+	},
 	"my-px": {
 		"marginTop": 1,
 		"marginBottom": 1
@@ -2199,6 +2222,14 @@
 	"-mx-64": {
 		"marginLeft": -256,
 		"marginRight": -256
+	},
+	"-my-72": {
+		"marginTop": -288,
+		"marginBottom": -288
+	},
+	"-mx-72": {
+		"marginLeft": -288,
+		"marginRight": -288
 	},
 	"-my-px": {
 		"marginTop": -1,
@@ -2448,6 +2479,18 @@
 	"ml-64": {
 		"marginLeft": 256
 	},
+	"mt-72": {
+		"marginTop": 288
+	},
+	"mr-72": {
+		"marginRight": 288
+	},
+	"mb-72": {
+		"marginBottom": 288
+	},
+	"ml-72": {
+		"marginLeft": 288
+	},
 	"mt-px": {
 		"marginTop": 1
 	},
@@ -2688,6 +2731,18 @@
 	"-ml-64": {
 		"marginLeft": -256
 	},
+	"-mt-72": {
+		"marginTop": -288
+	},
+	"-mr-72": {
+		"marginRight": -288
+	},
+	"-mb-72": {
+		"marginBottom": -288
+	},
+	"-ml-72": {
+		"marginLeft": -288
+	},
 	"-mt-px": {
 		"marginTop": -1
 	},
@@ -2907,6 +2962,12 @@
 		"paddingBottom": 256,
 		"paddingLeft": 256
 	},
+	"p-72": {
+		"paddingTop": 288,
+		"paddingRight": 288,
+		"paddingBottom": 288,
+		"paddingLeft": 288
+	},
 	"p-px": {
 		"paddingTop": 1,
 		"paddingRight": 1,
@@ -3072,6 +3133,14 @@
 	"px-64": {
 		"paddingLeft": 256,
 		"paddingRight": 256
+	},
+	"py-72": {
+		"paddingTop": 288,
+		"paddingBottom": 288
+	},
+	"px-72": {
+		"paddingLeft": 288,
+		"paddingRight": 288
 	},
 	"py-px": {
 		"paddingTop": 1,
@@ -3320,6 +3389,18 @@
 	},
 	"pl-64": {
 		"paddingLeft": 256
+	},
+	"pt-72": {
+		"paddingTop": 288
+	},
+	"pr-72": {
+		"paddingRight": 288
+	},
+	"pb-72": {
+		"paddingBottom": 288
+	},
+	"pl-72": {
+		"paddingLeft": 288
 	},
 	"pt-px": {
 		"paddingTop": 1
@@ -3864,6 +3945,9 @@
 	},
 	"w-64": {
 		"width": 256
+	},
+	"w-72": {
+		"width": 288
 	},
 	"w-px": {
 		"width": 1
