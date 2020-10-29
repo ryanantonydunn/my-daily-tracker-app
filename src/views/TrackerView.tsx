@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import ConfirmDelete from "../base/ConfirmDelete";
 import DateShifter from "../base/DateShifter";
-import Graph from "./Graph";
+import TrackerViewGraph from "./TrackerViewGraph";
 import Icon from "../base/Icon";
 import LargeButton from "../base/LargeButton";
 import { tw } from "../base/styles/tailwind";
@@ -153,9 +153,9 @@ const TrackerView = ({ route, navigation }) => {
             </SafeView>
 
             <SafeView left right style={tw(`mt-4 items-center justify-center`)}>
-              <Graph
-                trackerId={trackerId1}
-                trackerIdCompare="activity-run"
+              <TrackerViewGraph
+                trackerId1={trackerId1}
+                trackerId2={trackerId2}
                 date={activeDate}
                 type={type}
               />

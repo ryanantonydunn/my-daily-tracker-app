@@ -1,17 +1,21 @@
 import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
-import { getDateKey } from "../utils/getDateKey";
 import { col, tw } from "../base/styles/tailwind";
 import T from "../base/Text";
 import format from "date-fns/format";
 import isToday from "date-fns/isToday";
+import isThisWeek from "date-fns/isThisWeek";
+import isThisMonth from "date-fns/isThisMonth";
+import getDaysInMonth from "date-fns/getDaysInMonth";
+import startOfWeek from "date-fns/startOfWeek";
+import addDays from "date-fns/addDays";
 import { ScrollView } from "react-native-gesture-handler";
 import DataContext from "../store/DataContext";
 import Svg, { Circle, Line } from "react-native-svg";
 
 interface GraphProps {
-  trackerId: string;
-  trackerIdCompare?: string;
+  trackerId1: string;
+  trackerId2: string | undefined;
   date: Date;
   type: string;
 }
@@ -28,61 +32,89 @@ const styles = StyleSheet.create({
   },
   dateCurrent: tw(`bg-yellow-200`),
   dayText: tw(`text-gray-500 text-xs uppercase`),
+  weekText: tw(`text-gray-800 text-xxs uppercase`),
   dateText: tw(``),
 });
 
-const prepareDates = (n, date) =>
-  Array.from({ length: n }).map((_, i) => {
-    const d = new Date(date);
-    d.setDate(d.getDate() - (n - 1 - i));
-    return {
-      date: d,
-      dateKey: getDateKey(d),
-    };
+const TrackerViewGraph = ({
+  trackerId1,
+  trackerId2,
+  date,
+  type,
+}: GraphProps) => {
+  const { getTracker, getAverageValue } = useContext(DataContext);
+  const tracker1 = getTracker(trackerId1);
+  const tracker2 = getTracker(trackerId2);
+  const trackers = [tracker1, tracker2].filter(Boolean);
+
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  let dates, dateLabels, isCurrent, values;
+  /**
+   * Day formatting
+   */
+  if (type === "day") {
+    const numberOfDays = getDaysInMonth(date);
+    dates = Array.from(
+      { length: numberOfDays },
+      (_, i) => new Date(year, month, i + 1)
+    );
+    isCurrent = isToday;
+    dateLabels = dates.map((date) => (
+      <>
+        <T style={styles.dayText}>{format(date, "eee")}</T>
+        <T style={styles.dateText}>{format(date, "d")}</T>
+      </>
+    ));
+    values = trackers.map((tracker) =>
+      dates.map((date) => getAverageValue(tracker.id, date, 1))
+    );
+
+    /**
+     * Week formatting
+     */
+  } else if (type === "week") {
+    const firstDate = startOfWeek(new Date(year, 0, 1));
+    dates = Array.from({ length: 52 }, (_, i) => addDays(firstDate, i * 7));
+    isCurrent = isThisWeek;
+    dateLabels = dates.map((date) => (
+      <>
+        <T style={styles.weekText}>{format(date, "MMM d")}</T>
+        <T style={styles.weekText}>{format(addDays(date, 6), "MMM d")}</T>
+      </>
+    ));
+    values = trackers.map((tracker) =>
+      dates.map((date) => getAverageValue(tracker.id, date, 7))
+    );
+
+    /**
+     * Month formatting
+     */
+  } else if (type === "month") {
+    dates = Array.from({ length: 12 }, (_, i) => new Date(year, i, 1));
+    isCurrent = isThisMonth;
+    dateLabels = dates.map((date) => (
+      <T style={styles.dayText}>{format(date, "MMM")}</T>
+    ));
+    values = trackers.map((tracker) =>
+      dates.map((date) => {
+        const numberOfDays = getDaysInMonth(date);
+        return getAverageValue(tracker.id, date, numberOfDays);
+      })
+    );
+  } else {
+    return;
+  }
+
+  const scales = trackers.map((tracker, i) => {
+    const min = Math.min(...values[i]);
+    const max = Math.max(...values[i]);
+    const labels = [max, min];
+    return { min, max, labels, color: tracker.color };
   });
 
-const Graph = ({ trackerId, trackerIdCompare, date, type }: GraphProps) => {
-  const { getEntry, getTracker } = useContext(DataContext);
-  const tracker = getTracker(trackerId);
-  // const dates = prepareDates(30, date);
-
-  // TODO transform data into these three arrays
-
-  // TODO days = this month, weeks = weeks of the year, months = months of the year
-  const dates = [
-    new Date(2020, 8, 15),
-    new Date(2020, 8, 14),
-    new Date(2020, 8, 13),
-    new Date(2020, 8, 15),
-    new Date(2020, 8, 14),
-    new Date(2020, 8, 13),
-    new Date(2020, 8, 15),
-    new Date(2020, 8, 14),
-    new Date(2020, 8, 13),
-    new Date(2020, 8, 15),
-    new Date(2020, 8, 14),
-    new Date(2020, 8, 13),
-  ];
-
-  const scales = [
-    {
-      min: 0,
-      max: 10,
-      labels: [10, 5, 0],
-      color: "green-500",
-    },
-    {
-      min: 10,
-      max: 100,
-      labels: [100, 70, 40, 10],
-      color: "red-500",
-    },
-  ];
-
-  const values = [
-    [0, 10, 5],
-    [52, 45.5, 41.7],
-  ];
+  console.log(values, scales);
 
   // generate dot values
   const dots: { x: number; y: number }[][] = values.map(
@@ -142,13 +174,12 @@ const Graph = ({ trackerId, trackerIdCompare, date, type }: GraphProps) => {
         ))}
         <View style={{ width: CELL_SIZE * dates.length }}>
           <View style={tw(`flex-row`)}>
-            {dates.map((date, i) => (
+            {dateLabels.map((dateLabel, i) => (
               <View
                 key={i}
-                style={[styles.date, isToday(date) && styles.dateCurrent]}
+                style={[styles.date, isCurrent(dates[i]) && styles.dateCurrent]}
               >
-                <T style={styles.dayText}>{format(date, "eee")}</T>
-                <T style={styles.dateText}>{format(date, "d")}</T>
+                {dateLabel}
               </View>
             ))}
           </View>
@@ -168,31 +199,6 @@ const Graph = ({ trackerId, trackerIdCompare, date, type }: GraphProps) => {
                   />
                 );
               })}
-              {/* <Line
-              x1={25}
-              y1={32}
-              x2={75}
-              y2={82}
-              strokeWidth={2}
-              stroke={col("red-500")}
-            />
-            <Line
-              x1={25}
-              y1={18}
-              x2={75}
-              y2={118}
-              strokeWidth={2}
-              stroke={col(tracker.color)}
-            />
-            <Line
-              x1={75}
-              y1={118}
-              x2={125}
-              y2={75}
-              strokeWidth={2}
-              stroke={col(tracker.color)}
-            /> */}
-
               {lines.map((trackerLines, trackerIndex) =>
                 trackerLines.map((l, i) => (
                   <Line
@@ -221,21 +227,9 @@ const Graph = ({ trackerId, trackerIdCompare, date, type }: GraphProps) => {
             </Svg>
           </View>
         </View>
-        {/* {dates.map(({ date }, i) => (
-          <View key={i} style={tw(`border-l border-b border-gray-400 p-2`)}>
-            <View style={[styles.day, isToday(date) && styles.today]}>
-              <T style={styles.dayText}>{format(date, "eee")}</T>
-              <T style={styles.dateText}>{format(date, "d")}</T>
-            </View>
-            <View style={tw(`flex-row items-end`)}>
-              <View style={tw(`w-4 h-12 mr-1 bg-green-500`)} />
-              <View style={tw(`w-4 h-64 bg-red-500`)} />
-            </View>
-          </View>
-        ))} */}
       </ScrollView>
     </>
   );
 };
 
-export default Graph;
+export default TrackerViewGraph;

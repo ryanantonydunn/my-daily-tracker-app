@@ -1,9 +1,12 @@
 import React, { useMemo, useState } from "react";
+import addDays from "date-fns/addDays";
+import { getDateKey } from "../utils/getDateKey";
 import getNewId from "../utils/getNewId";
 import isDateWithinRange from "../utils/isDateWithinRange";
 import { Entry, Tracker, TrackerGroup } from "./dataTypes";
 import exampleEntries from "./exampleEntries";
 import initialTrackers from "./initialTrackers";
+import isNumeric from "../utils/isNumeric";
 
 interface DataContext {
   groups: TrackerGroup[];
@@ -17,10 +20,10 @@ interface DataContext {
   deleteTracker: Function;
   setTrackerOrder: Function;
   getEntry: Function;
-  findEntries: Function;
   addEntry: Function;
   editEntry: Function;
   setEntry: Function;
+  getAverageValue: Function;
 }
 
 export const newTracker = (): Tracker => ({
@@ -89,13 +92,6 @@ export const DataProvider = ({ children }) => {
   const getEntriesByTracker = (trackerId) =>
     entries.filter((d) => d.trackerId === trackerId);
 
-  const findEntries = (trackerId, minDate, maxDate) =>
-    entries.filter(
-      (d) =>
-        d.trackerId === trackerId &&
-        isDateWithinRange(d.dateKey, minDate, maxDate)
-    );
-
   const addEntry = (entry: Entry) => {
     setEntries((d) => [...d, { ...entry, id: getNewId() }]);
   };
@@ -140,6 +136,23 @@ export const DataProvider = ({ children }) => {
   //   });
   // }, [entries]);
 
+  const getAverageValue = (trackerId: string, date: Date, days: number) => {
+    let total = 0;
+    for (let i = 0; i < days; i++) {
+      const entry = getEntry({
+        trackerId,
+        dateKey: getDateKey(addDays(date, i)),
+      });
+      console.log(entry);
+      if (isNumeric(entry?.value)) {
+        total += parseFloat(entry.value);
+      } else if (entry?.value) {
+        total++;
+      }
+    }
+    return total / days;
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -154,10 +167,10 @@ export const DataProvider = ({ children }) => {
         deleteTracker,
         setTrackerOrder,
         getEntry,
-        findEntries,
         addEntry,
         editEntry,
         setEntry,
+        getAverageValue,
       }}
     >
       {children}

@@ -1613,6 +1613,9 @@
 	"text-6xl": {
 		"fontSize": 64
 	},
+	"text-xxs": {
+		"fontSize": 10.4
+	},
 	"leading-3": {
 		"lineHeight": 12
 	},
