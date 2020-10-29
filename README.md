@@ -3,7 +3,6 @@
 MyDailyTracker is a mobile app for self-tracking moods and habits.
 
 ![MyDailyTracker App Screens](https://github.com/ryanantonydunn/my-daily-tracker-app/raw/master/mydailytracker-screens.png "MyDailyTracker App Screens")
-![MyDailyTracker Logo](https://github.com/ryanantonydunn/my-daily-tracker-app/raw/master/mydailytracker.webp "MyDailyTracker Logo")
 
 ## Running the project
 
